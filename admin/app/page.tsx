@@ -6,17 +6,10 @@ import { useState, type FormEvent, type ReactNode } from 'react';
 import { icons } from './icons';
 import { Frame, Loading, useModeration, useStaff, type StaffMe } from './painel';
 
-type Step = 'login' | 'enroll' | 'totp' | 'codes';
-
 export default function HomePage() {
   const me = useStaff();
-  const [step, setStep] = useState<Step>('login');
-  const [email, setEmail] = useState('');
-  const [firebaseToken, setFirebaseToken] = useState('');
-  const [code, setCode] = useState('');
-  const [secret, setSecret] = useState('');
-  const [otpauthUrl, setOtpauthUrl] = useState('');
-  const [codes, setCodes] = useState<string[]>([]);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -34,67 +27,23 @@ export default function HomePage() {
     );
   }
 
-  async function start(event: FormEvent) {
+  async function login(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
     setMessage('');
     const response = await fetch('/api/session', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(
-        firebaseToken.trim()
-          ? { firebaseToken: firebaseToken.trim() }
-          : { devToken: `dev:${email.trim()}` },
-      ),
+      body: JSON.stringify({ username: username.trim(), password }),
     });
-    const body = (await response.json()) as { step?: Step; message?: string };
-    setBusy(false);
-    if (!response.ok || (body.step !== 'enroll' && body.step !== 'totp')) {
-      setMessage(body.message ?? 'Não consegui entrar.');
-      return;
-    }
-    setStep(body.step);
-    if (body.step === 'enroll') {
-      const enroll = await fetch('/api/totp/enroll', { method: 'POST' });
-      const enrollBody = (await enroll.json()) as {
-        secret?: string;
-        otpauthUrl?: string;
-        message?: string;
-      };
-      if (!enroll.ok || !enrollBody.secret) {
-        setMessage(enrollBody.message ?? 'Não consegui preparar o autenticador.');
-        return;
-      }
-      setSecret(enrollBody.secret);
-      setOtpauthUrl(enrollBody.otpauthUrl ?? '');
-    }
-  }
-
-  async function confirm(event: FormEvent) {
-    event.preventDefault();
-    setBusy(true);
-    setMessage('');
-    const path = step === 'enroll' ? '/api/totp/confirm' : '/api/totp/session';
-    const response = await fetch(path, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ code }),
-    });
-    const body = (await response.json()) as { recoveryCodes?: string[]; message?: string };
+    const body = (await response.json()) as { message?: string };
     setBusy(false);
     if (!response.ok) {
-      setMessage(body.message ?? 'Código inválido.');
-      return;
-    }
-    if (body.recoveryCodes) {
-      setCodes(body.recoveryCodes);
-      setStep('codes');
+      setMessage(body.message ?? 'Não consegui entrar.');
       return;
     }
     window.location.assign('/');
   }
-
-  const stepIndex = { login: 0, enroll: 1, totp: 1, codes: 2 }[step];
 
   return (
     <main className="login">
@@ -112,100 +61,34 @@ export default function HomePage() {
       </section>
       <section className="login-form">
         <div className="card">
-          <div className="steps" aria-hidden="true">
-            {[0, 1, 2].map((index) => (
-              <span key={index} className={index <= stepIndex ? 'done' : undefined} />
-            ))}
-          </div>
-          {step === 'login' ? (
-            <form className="stack" onSubmit={(event) => void start(event)}>
-              <h2>Entrar</h2>
-              <p className="muted">
-                Use a conta da equipe. Depois vem o código do autenticador. Sem esse código, o
-                painel não abre.
-              </p>
-              <label>
-                E-mail do ambiente de teste
-                <input
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  autoComplete="username"
-                  placeholder="voce@egua.local"
-                />
-              </label>
-              <label>
-                Token do Firebase
-                <textarea
-                  value={firebaseToken}
-                  onChange={(event) => setFirebaseToken(event.target.value)}
-                  rows={3}
-                />
-              </label>
-              <button type="submit" disabled={busy}>
-                Continuar {icons.arrow}
-              </button>
-            </form>
-          ) : null}
-          {step === 'enroll' ? (
-            <form className="stack" onSubmit={(event) => void confirm(event)}>
-              <h2>Ative o autenticador</h2>
-              <p className="muted">
-                Adicione esta chave no aplicativo autenticador e digite o código de 6 dígitos.
-              </p>
-              <div className="secret">{secret}</div>
-              <p className="muted">
-                <code>{otpauthUrl}</code>
-              </p>
-              <label>
-                Código
-                <input
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  value={code}
-                  onChange={(event) => setCode(event.target.value)}
-                  placeholder="000000"
-                />
-              </label>
-              <button type="submit" disabled={busy}>
-                Ativar
-              </button>
-            </form>
-          ) : null}
-          {step === 'totp' ? (
-            <form className="stack" onSubmit={(event) => void confirm(event)}>
-              <h2>Código do autenticador</h2>
-              <label>
-                Código do autenticador ou código de recuperação
-                <input
-                  inputMode="text"
-                  autoComplete="one-time-code"
-                  value={code}
-                  onChange={(event) => setCode(event.target.value)}
-                  placeholder="000000"
-                />
-              </label>
-              <button type="submit" disabled={busy}>
-                Entrar {icons.arrow}
-              </button>
-            </form>
-          ) : null}
-          {step === 'codes' ? (
-            <div className="stack">
-              <h2>Códigos de recuperação</h2>
-              <p className="muted">
-                Guarde estes códigos. Eles aparecem uma vez só e servem se você perder o
-                autenticador.
-              </p>
-              <ul className="codes">
-                {codes.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-              <button type="button" onClick={() => window.location.assign('/')}>
-                Já guardei
-              </button>
-            </div>
-          ) : null}
+          <form className="stack" onSubmit={(event) => void login(event)}>
+            <h2>Entrar</h2>
+            <p className="muted">Use o usuário e a senha da equipe.</p>
+            <label>
+              Usuário
+              <input
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
+                autoComplete="username"
+                autoCapitalize="none"
+                spellCheck={false}
+                required
+              />
+            </label>
+            <label>
+              Senha
+              <input
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                autoComplete="current-password"
+                required
+              />
+            </label>
+            <button type="submit" disabled={busy}>
+              Entrar {icons.arrow}
+            </button>
+          </form>
           {message ? <p className="error">{message}</p> : null}
         </div>
       </section>

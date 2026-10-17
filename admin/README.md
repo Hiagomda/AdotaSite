@@ -1,6 +1,6 @@
 # Painel da equipe
 
-Painel do Égua, adota! para a equipe moderar o app: denúncias, posts, verificação de ONG e protetor, pessoas, equipe e auditoria. Login com a conta do app e código do autenticador (TOTP).
+Painel do Égua, adota! para a equipe moderar o app: denúncias, posts, verificação de ONG e protetor, pessoas, equipe e auditoria. Login só com usuário e senha.
 
 O painel não tem banco. Ele conversa com a API do app (repositório `Hiagomda/adota`) pelo servidor do Next, que guarda a sessão num cookie `HttpOnly`. As rotas de moderação (`/admin/v1/...`) moram na API.
 
@@ -16,4 +16,14 @@ pnpm dev                     # http://localhost:3020
 
 ## Subir no Coolify
 
-O serviço `admin` do `docker-compose.yml` da raiz sobe o painel em `https://admin-…sslip.io`, com `ADMIN_API_URL` apontando para a API do app. Na API do app (repositório `adota`) precisam estar `ADMIN_TOTP_KEY` (32 bytes em base64) e `ADMIN_ORIGIN` com o endereço do painel.
+O serviço `admin` do `docker-compose.yml` da raiz sobe o painel em `https://admin-…sslip.io`, com `ADMIN_API_URL` apontando para a API do app. Na API do app (repositório `adota`) precisa estar `ADMIN_ORIGIN` com o endereço do painel.
+
+## Criar um login
+
+Os logins moram na API. No terminal do container da API (no Coolify) rode:
+
+```bash
+pnpm --filter @patinha/api staff:login -- --username hiago --name "Hiago" --role superadmin
+```
+
+A senha é pedida duas vezes no terminal (mínimo 12 caracteres). Rodar de novo com o mesmo usuário troca a senha e derruba as sessões abertas. Com `--handle <arroba>` o login fica ligado a uma conta que já existe no app.

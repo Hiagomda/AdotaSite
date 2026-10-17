@@ -42,14 +42,11 @@ export function sessionCookie(token: string): string {
   return `egua_admin=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${8 * 60 * 60}${secureFlag()}`;
 }
 
-export function ticketCookie(ticket: string): string {
-  return `egua_admin_ticket=${encodeURIComponent(ticket)}; HttpOnly; Path=/; SameSite=Lax; Max-Age=300${secureFlag()}`;
-}
-
 export function clearSessionCookies(): string[] {
   const secure = secureFlag();
   return [
     `egua_admin=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${secure}`,
+    // Apaga o cookie do login antigo com autenticador, se ainda existir.
     `egua_admin_ticket=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${secure}`,
   ];
 }

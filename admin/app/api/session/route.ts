@@ -2,17 +2,17 @@ import {
   clearSessionCookies,
   readJson,
   rejectCrossOrigin,
-  ticketCookie,
+  sessionCookie,
   upstream,
 } from '../../../lib/bff';
 
 export async function POST(request: Request) {
   const rejected = rejectCrossOrigin(request);
   if (rejected) return rejected;
-  const body = (await request.json()) as { firebaseToken?: string; devToken?: string };
-  const upstreamResponse = await upstream('/admin/v1/session', request, {
+  const body = (await request.json()) as { username?: string; password?: string };
+  const upstreamResponse = await upstream('/admin/v1/login', request, {
     method: 'POST',
-    body: JSON.stringify(body),
+    body: JSON.stringify({ username: body.username, password: body.password }),
   });
   const payload = await readJson(upstreamResponse);
   if (!upstreamResponse.ok) {
@@ -21,8 +21,9 @@ export async function POST(request: Request) {
       { status: upstreamResponse.status },
     );
   }
-  const ticket = typeof payload.ticket === 'string' ? payload.ticket : '';
-  return Response.json({ step: payload.step }, { headers: { 'set-cookie': ticketCookie(ticket) } });
+  const token = typeof payload.token === 'string' ? payload.token : '';
+  if (!token) return Response.json({ message: 'Não consegui entrar.' }, { status: 502 });
+  return Response.json({ ok: true }, { headers: { 'set-cookie': sessionCookie(token) } });
 }
 
 export async function DELETE(request: Request) {
