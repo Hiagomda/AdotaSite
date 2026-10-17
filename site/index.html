@@ -243,6 +243,51 @@
         pointer-events: none;
       }
 
+      /* ---------- Convite de post compartilhado (?post=) ---------- */
+      .convite {
+        background: var(--coral-50);
+        border-bottom: 1px solid var(--linha);
+        padding: 20px 0;
+      }
+      .convite .contido {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 16px 24px;
+      }
+      .convite-texto {
+        flex: 1 1 280px;
+      }
+      .convite-texto b {
+        display: block;
+        font: 800 var(--t-lg) / 1.2 var(--titulo);
+        color: var(--turquesa-800);
+      }
+      .convite-texto span {
+        display: block;
+        margin-top: 4px;
+        font-size: var(--t-sm);
+        color: var(--tinta-suave);
+      }
+      .convite-acoes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .botao-turquesa-linha {
+        color: var(--turquesa-800);
+        box-shadow: inset 0 0 0 2px var(--turquesa-300);
+      }
+      .botao-turquesa-linha:hover {
+        box-shadow: inset 0 0 0 2px var(--turquesa);
+      }
+      @media (max-width: 520px) {
+        .convite-acoes,
+        .convite-acoes .botao {
+          width: 100%;
+        }
+      }
+
       /* ---------- Herói ---------- */
       .heroi {
         position: relative;
@@ -1246,6 +1291,25 @@
     </header>
 
     <main>
+      <!-- Quem abre um post compartilhado pelo app chega com ?post=<id>. -->
+      <section class="convite" id="convite" aria-labelledby="convite-titulo" hidden>
+        <div class="contido">
+          <div class="convite-texto">
+            <b id="convite-titulo">Te mandaram um bichinho do Égua, adota! 🐾</b>
+            <span
+              >Já tem o app? Abre o post direto. Ainda não tem? Baixa grátis e depois toca no link
+              de novo.</span
+            >
+          </div>
+          <div class="convite-acoes">
+            <a class="botao botao-coral" id="convite-abrir" href="#baixar">Abrir no app</a>
+            <a class="botao botao-turquesa-linha" href="#baixar">
+              <svg aria-hidden="true"><use href="#i-baixar" /></svg>
+              Baixar o app
+            </a>
+          </div>
+        </div>
+      </section>
       <!-- ================= Apresentação ================= -->
       <div id="sobre" role="tabpanel" aria-labelledby="aba-sobre">
         <section class="heroi">
@@ -1799,6 +1863,19 @@
       }
       window.addEventListener('hashchange', mostrarAba);
       mostrarAba();
+
+      // Post compartilhado pelo app: oferece abrir no app. No Android o intent:// cai no download
+      // quando o app não está instalado.
+      const postCompartilhado = new URLSearchParams(location.search).get('post');
+      if (postCompartilhado && /^[A-Za-z0-9-]{1,64}$/.test(postCompartilhado)) {
+        const abrir = document.getElementById('convite-abrir');
+        const download = `${location.origin}${location.pathname}#baixar`;
+        abrir.href = /Android/i.test(navigator.userAgent)
+          ? `intent://post/${postCompartilhado}#Intent;scheme=egua;package=app.egua.adota;` +
+            `S.browser_fallback_url=${encodeURIComponent(download)};end`
+          : `egua://post/${postCompartilhado}`;
+        document.getElementById('convite').hidden = false;
+      }
 
       // O APK fica no volume do container; o botão só libera quando ele existe.
       const botao = document.getElementById('botao-baixar');
