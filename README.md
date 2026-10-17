@@ -20,3 +20,11 @@ docker compose up --build site
 ```
 
 O `docker-compose.yml` da raiz é o que o Coolify sobe. O endereço de download não pode mudar, porque os APKs instalados procuram atualização nele.
+
+## Painel
+
+- `admin/`: Next.js que conversa com a API do app por `ADMIN_API_URL`. Não tem banco próprio. Detalhes em [`admin/README.md`](admin/README.md).
+
+```bash
+cd admin && cp .env.example .env.local && pnpm install && pnpm dev
+```
