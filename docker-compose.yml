@@ -1,0 +1,12 @@
+services:
+  site:
+    build: ./site
+    environment:
+      SERVICE_URL_SITE_80: https://download-fpmewu0com3qkbfihrsihc6y.86.48.25.233.sslip.io
+    volumes:
+      - apk:/apk
+    restart: unless-stopped
+    mem_limit: 64m
+
+volumes:
+  apk:
