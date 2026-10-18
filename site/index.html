@@ -96,6 +96,10 @@
         display: block;
         max-width: 100%;
       }
+      /* O CSS define só a largura das fotos; sem isto o height do HTML fica fixo e estica a imagem */
+      img {
+        height: auto;
+      }
       h1,
       h2,
       h3 {
@@ -689,6 +693,7 @@
         margin-top: 48px;
       }
       .selo {
+        margin: 0;
         text-align: center;
       }
       .selo img {
