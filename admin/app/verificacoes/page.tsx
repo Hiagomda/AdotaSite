@@ -19,11 +19,22 @@ interface Verification {
   organizationName: string;
   note: string | null;
   createdAt: string;
+  /** O que a pessoa pediu ser. APIs antigas não mandam os campos do cadastro. */
+  kind?: 'ngo' | 'protector';
+  instagram?: string | null;
+  cnpj?: string | null;
+  neighborhood?: string | null;
   userId: string;
   handle: string;
   name: string;
   role: string;
   verified: boolean;
+}
+
+const kindLabel = { ngo: 'ONG ou coletivo', protector: 'Protetor independente' } as const;
+
+function formatCnpj(cnpj: string): string {
+  return cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
 }
 
 export default function VerificationsPage() {
@@ -66,6 +77,29 @@ export default function VerificationsPage() {
                   {item.name} <span className="muted">@{item.handle}</span> · {labelRole(item.role)}
                   <span className="muted"> · pedido em {formatDate(item.createdAt)}</span>
                 </p>
+                {item.kind || item.neighborhood ? (
+                  <p>
+                    {item.kind ? <strong>Pediu como {kindLabel[item.kind]}</strong> : null}
+                    {item.neighborhood ? (
+                      <span className="muted"> · atua em {item.neighborhood}</span>
+                    ) : null}
+                  </p>
+                ) : null}
+                {item.instagram || item.cnpj ? (
+                  <p>
+                    {item.instagram ? (
+                      <a
+                        href={`https://instagram.com/${encodeURIComponent(item.instagram)}`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                      >
+                        @{item.instagram}
+                      </a>
+                    ) : null}
+                    {item.instagram && item.cnpj ? ' · ' : null}
+                    {item.cnpj ? <span>CNPJ {formatCnpj(item.cnpj)}</span> : null}
+                  </p>
+                ) : null}
                 {item.note ? (
                   <p className="quote">{item.note}</p>
                 ) : (
