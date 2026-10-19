@@ -74,7 +74,7 @@ export default function TeamPage() {
         role: form.get('role'),
         expectedRole: member.role,
         justification: form.get('justification'),
-        totpCode: form.get('totpCode'),
+        password: form.get('password'),
       }),
     });
     const body = (await response.json()) as { message?: string };
@@ -89,7 +89,7 @@ export default function TeamPage() {
     <Frame me={me}>
       <PageHeader
         title="Equipe"
-        subtitle="Só o superadmin muda papéis, com motivo e código do autenticador."
+        subtitle="Só o superadmin muda papéis, com motivo e a própria senha."
       />
       {message ? <p className="error">{message}</p> : null}
       {team && team.length === 0 ? <p>Ninguém da equipe encontrado.</p> : null}
@@ -126,7 +126,13 @@ export default function TeamPage() {
                       ))}
                     </select>
                     <input name="justification" placeholder="Motivo" required minLength={10} />
-                    <input name="totpCode" inputMode="numeric" placeholder="Código" required />
+                    <input
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      placeholder="Sua senha"
+                      required
+                    />
                     <button type="submit">Salvar</button>
                   </form>
                 </td>
