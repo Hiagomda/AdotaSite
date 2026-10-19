@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Página não encontrada · Égua, adota!</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0F3F3F" />
+    <link rel="icon" href="/img/icone.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Mesmas cores e fontes do index.html */
+      :root {
+        color-scheme: light;
+        --creme: #fff8ee;
+        --tinta: #1b2b2b;
+        --tinta-suave: #4a5a5a;
+        --turquesa-800: #0f3f3f;
+        --coral: #f26b4e;
+        --coral-600: #d9553a;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 32px max(20px, env(safe-area-inset-right, 0px)) 48px
+          max(20px, env(safe-area-inset-left, 0px));
+        background: var(--creme);
+        color: var(--tinta);
+        font-family:
+          'Nunito',
+          system-ui,
+          -apple-system,
+          'Segoe UI',
+          sans-serif;
+        text-align: center;
+      }
+      main {
+        max-width: 34rem;
+      }
+      img {
+        width: min(100%, 360px);
+        height: auto;
+      }
+      h1 {
+        margin: 20px 0 0;
+        font-family: 'Baloo 2', 'Nunito', system-ui, sans-serif;
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        color: var(--turquesa-800);
+      }
+      p {
+        margin: 12px 0 0;
+        font-size: 1.125rem;
+        line-height: 1.5;
+        color: var(--tinta-suave);
+      }
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 54px;
+        margin-top: 28px;
+        padding: 0 26px;
+        border-radius: 14px;
+        background: var(--coral);
+        color: #fff;
+        font-weight: 800;
+        font-size: 1.0625rem;
+        text-decoration: none;
+      }
+      a:hover {
+        background: var(--coral-600);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img
+        src="/img/cupu-perdido.webp"
+        alt="Cupu, o mascote, com a lupa ao lado de uma placa escrita 404"
+        width="520"
+        height="403"
+      />
+      <h1>Égua, essa página sumiu!</h1>
+      <p>O Cupu farejou por tudo e não achou nada por aqui. Bora voltar para o começo?</p>
+      <a href="/">Voltar para o início</a>
+    </main>
+  </body>
+</html>

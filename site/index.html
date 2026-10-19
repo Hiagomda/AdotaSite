@@ -730,6 +730,18 @@
         color: var(--tinta);
       }
 
+      /* Cupu no canto de uma seção, ao lado do título */
+      .com-cupu {
+        position: relative;
+      }
+      .cupu-canto {
+        position: absolute;
+        top: -12px;
+        right: var(--gutter-d);
+        width: 200px;
+        height: auto;
+      }
+
       /* Selos de voluntariado */
       .selos {
         display: grid;
@@ -895,8 +907,18 @@
         font-size: var(--t-sm);
         color: var(--turquesa-300);
       }
-      .qr {
+      .baixar-lado {
         justify-self: end;
+        display: grid;
+        justify-items: center;
+      }
+      .baixar-lado .cupu {
+        width: 220px;
+        height: auto;
+        margin-bottom: -14px;
+        position: relative;
+      }
+      .qr {
         display: grid;
         justify-items: center;
         gap: 14px;
@@ -1096,6 +1118,19 @@
         }
         .qr {
           display: none;
+        }
+        .baixar-lado {
+          justify-self: start;
+        }
+        .baixar-lado .cupu {
+          width: 170px;
+          margin-bottom: 0;
+        }
+        .cupu-canto {
+          position: static;
+          display: block;
+          width: 150px;
+          margin-bottom: 12px;
         }
         .chamada-caixa {
           grid-template-columns: minmax(0, 1fr);
@@ -1597,7 +1632,15 @@
         </section>
 
         <section class="secao" aria-labelledby="titulo-selos">
-          <div class="contido">
+          <div class="contido com-cupu">
+            <img
+              class="cupu-canto"
+              src="/img/cupu-festa.webp"
+              alt=""
+              width="200"
+              height="224"
+              loading="lazy"
+            />
             <div class="secao-cabeca">
               <span class="rotulo">Voluntariado</span>
               <h2 id="titulo-selos">Cada boa ação vale XP, nível e selo</h2>
@@ -1650,7 +1693,15 @@
         </section>
 
         <section class="secao cuidados" aria-labelledby="titulo-cuidados">
-          <div class="contido">
+          <div class="contido com-cupu">
+            <img
+              class="cupu-canto"
+              src="/img/cupu-escudo.webp"
+              alt=""
+              width="200"
+              height="192"
+              loading="lazy"
+            />
             <div class="secao-cabeca">
               <span class="rotulo">Segurança</span>
               <h2 id="titulo-cuidados">Feito com cuidado, para os bichos e para as pessoas</h2>
@@ -1756,11 +1807,14 @@
                 <span id="aviso">Se o botão não liberar, atualiza a página daqui a pouco.</span>
               </div>
             </div>
-            <div class="qr" id="qr" hidden>
-              <div class="qr-codigo" id="qr-codigo"></div>
-              <p>
-                <b>Tá no computador?</b><br />Aponta a câmera do celular para abrir esta página.
-              </p>
+            <div class="baixar-lado">
+              <img class="cupu" src="/img/cupu-celular.webp" alt="" width="220" height="206" />
+              <div class="qr" id="qr" hidden>
+                <div class="qr-codigo" id="qr-codigo"></div>
+                <p>
+                  <b>Tá no computador?</b><br />Aponta a câmera do celular para abrir esta página.
+                </p>
+              </div>
             </div>
           </div>
         </section>
