@@ -86,6 +86,12 @@ export const icons = {
       <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" />
     </Icon>
   ),
+  calendar: (
+    <Icon>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M16 3v4M8 3v4M3 10h18" />
+    </Icon>
+  ),
   clock: (
     <Icon>
       <circle cx="12" cy="12" r="9" />
