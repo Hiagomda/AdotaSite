@@ -88,6 +88,7 @@ const sections: {
     permission: 'verifications.manage',
     count: 'pendingVerifications',
   },
+  { href: '/eventos', label: 'Eventos', icon: icons.calendar, permission: 'posts.moderate' },
   { href: '/pessoas', label: 'Pessoas', icon: icons.people, permission: 'users.read' },
   { href: '/equipe', label: 'Equipe', icon: icons.team, permission: 'team.read' },
   { href: '/auditoria', label: 'Auditoria', icon: icons.audit, permission: 'audit.read' },
