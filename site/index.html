@@ -495,6 +495,118 @@
         font-size: 0.8rem;
         font-weight: 800;
       }
+      .selo-vivo {
+        position: absolute;
+        top: 90px;
+        right: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--turquesa-900);
+        color: var(--creme);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .selo-vivo::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--coral);
+        animation: vivo 1.8s ease-out infinite;
+      }
+      .patas .pata {
+        transition:
+          left 0.6s ease,
+          top 0.6s ease;
+      }
+      .patas .pata.nova {
+        animation: cai 0.5s ease-out both;
+      }
+      .patas .pata.p1 {
+        z-index: 2;
+        width: 46px;
+        height: 46px;
+        animation: pulo 2.8s ease-in-out infinite;
+      }
+      @keyframes cai {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -170%);
+        }
+      }
+      .folha {
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+      }
+      .folha.trocando {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      .folha-topo span:last-child {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .folha-corpo {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .folha-corpo img {
+        flex: none;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        object-fit: cover;
+        background: var(--caramelo-100);
+      }
+      .folha-corpo strong {
+        margin-top: 0;
+      }
+      .folha-corpo p {
+        margin-top: 2px;
+      }
+      a.folha-botao {
+        text-decoration: none;
+      }
+      a.folha-botao:hover {
+        background: var(--turquesa-700);
+      }
+      .chip-atencao {
+        background: #fdf0dc;
+        color: #8a5a12;
+      }
+      .chip-calmo {
+        background: #e0f3ea;
+        color: #1f6b49;
+      }
+      .chip-perdido {
+        background: var(--turquesa-50);
+        color: var(--turquesa-700);
+      }
+      .chip-adocao {
+        background: var(--coral-50);
+        color: #a83b23;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .selo-vivo::before,
+        .patas .pata.p1,
+        .patas .pata.nova {
+          animation: none;
+        }
+        .folha,
+        .patas .pata {
+          transition: none;
+        }
+      }
       .vitrine .cupu {
         position: absolute;
         left: 0;
@@ -1569,11 +1681,16 @@
               </div>
             </div>
 
-            <div class="vitrine" aria-hidden="true">
+            <div class="vitrine" aria-label="O app ao vivo: o que está acontecendo agora em Belém">
               <div class="celular">
                 <div class="tela">
                   <!-- Mapa ilustrativo: baía à esquerda, ruas e um parque -->
-                  <svg class="mapa" viewBox="0 0 276 548" preserveAspectRatio="xMidYMid slice">
+                  <svg
+                    class="mapa"
+                    aria-hidden="true"
+                    viewBox="0 0 276 548"
+                    preserveAspectRatio="xMidYMid slice"
+                  >
                     <rect width="276" height="548" fill="#EEF3EA" />
                     <path
                       d="M0 0h70c-14 60 10 110-6 170s-30 120-8 200-10 130-20 178H0z"
@@ -1599,18 +1716,31 @@
                   </svg>
                   <div class="tela-busca">
                     <svg aria-hidden="true"><use href="#i-busca" /></svg>
-                    Batista Campos, Belém
+                    <span id="tela-bairro">Batista Campos, Belém</span>
                   </div>
-                  <img
-                    class="pata p1"
-                    src="/img/pata-high.png"
-                    alt=""
-                    style="left: 46%; top: 39%"
-                  />
-                  <img class="pata" src="/img/pata-medium.png" alt="" style="left: 76%; top: 28%" />
-                  <img class="pata" src="/img/pata-low.png" alt="" style="left: 64%; top: 55%" />
-                  <img class="pata" src="/img/pata-medium.png" alt="" style="left: 34%; top: 61%" />
-                  <div class="folha">
+                  <span class="selo-vivo" id="selo-vivo" hidden>Ao vivo</span>
+                  <div class="patas" id="patas">
+                    <img
+                      class="pata p1"
+                      src="/img/pata-high.png"
+                      alt=""
+                      style="left: 46%; top: 39%"
+                    />
+                    <img
+                      class="pata"
+                      src="/img/pata-medium.png"
+                      alt=""
+                      style="left: 76%; top: 28%"
+                    />
+                    <img class="pata" src="/img/pata-low.png" alt="" style="left: 64%; top: 55%" />
+                    <img
+                      class="pata"
+                      src="/img/pata-medium.png"
+                      alt=""
+                      style="left: 34%; top: 61%"
+                    />
+                  </div>
+                  <div class="folha" id="folha" aria-live="polite">
                     <div class="folha-topo">
                       <span class="chip chip-urgente">Urgente</span> a ~1 km · há 12 min
                     </div>
@@ -2317,12 +2447,158 @@
         aoVivo.hidden = false;
       }
 
+      // Celular do topo ao vivo: as patas são os bichos que ainda precisam de alguém (ponto
+      // aproximado, como no mapa público do app) e a folha de baixo passa por eles, um de cada vez.
+      const celular = {
+        patas: document.getElementById('patas'),
+        folha: document.getElementById('folha'),
+        bairro: document.getElementById('tela-bairro'),
+        itens: [],
+        atual: 0,
+        timer: null,
+      };
+      const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const chipsAlerta = {
+        high: ['chip-urgente', 'Urgente'],
+        medium: ['chip-atencao', 'Atenção'],
+        low: ['chip-calmo', 'Pode esperar'],
+      };
+      const folhas = {
+        alert: { titulo: (quem) => `${quem} precisa de ajuda`, botao: 'Vou ajudar' },
+        lost: {
+          chip: ['chip-perdido', 'Perdido'],
+          titulo: (quem) => `${quem} se perdeu`,
+          botao: 'Vi esse bicho',
+        },
+        for_adoption: {
+          chip: ['chip-adocao', 'Para adoção'],
+          titulo: (quem) => `${quem} procura uma família`,
+          botao: 'Quero adotar',
+        },
+      };
+      const nomesEspecie = { dog: 'Cachorro', cat: 'Gato' };
+
+      // Belém urbana cabe neste retângulo. A baía fica à esquerda do desenho, então as patas
+      // ocupam o lado das ruas e a parte de cima, acima da folha.
+      function posicao(item, caixa) {
+        const { latitude, longitude } = item.location || {};
+        let hash = 0;
+        for (const letra of item.id) hash = (hash * 31 + letra.charCodeAt(0)) | 0;
+        const desvio = (n) => (((hash >> n) & 15) - 7.5) * 0.5;
+        const limitar = (v, min, max) => Math.min(max, Math.max(min, v));
+        const x = Number.isFinite(longitude) ? (longitude - caixa.oeste) / caixa.largura : 0.5;
+        const y = Number.isFinite(latitude) ? (caixa.norte - latitude) / caixa.altura : 0.5;
+        return {
+          left: limitar(36 + x * 52 + desvio(0), 32, 90),
+          top: limitar(24 + y * 34 + desvio(4), 22, 60),
+        };
+      }
+
+      // A área das patas acompanha onde elas estão, para não ficarem todas amontoadas no meio.
+      function caixaDe(itens) {
+        const pontos = itens.map((item) => item.location || {});
+        const lats = pontos.map((p) => p.latitude).filter(Number.isFinite);
+        const lngs = pontos.map((p) => p.longitude).filter(Number.isFinite);
+        if (lats.length === 0) return { oeste: -48.51, largura: 0.09, norte: -1.36, altura: 0.12 };
+        const largura = Math.max(Math.max(...lngs) - Math.min(...lngs), 0.02);
+        const altura = Math.max(Math.max(...lats) - Math.min(...lats), 0.02);
+        return {
+          oeste: (Math.max(...lngs) + Math.min(...lngs)) / 2 - largura / 2,
+          largura,
+          norte: (Math.max(...lats) + Math.min(...lats)) / 2 + altura / 2,
+          altura,
+        };
+      }
+
+      function mostrarNaFolha(indice) {
+        const item = celular.itens[indice];
+        if (!item) return;
+        celular.atual = indice;
+        for (const [i, pata] of [...celular.patas.children].entries()) {
+          pata.classList.toggle('p1', i === indice);
+        }
+        const trocar = () => {
+          const folha = folhas[item.kind] || folhas.alert;
+          const chip = folha.chip || chipsAlerta[item.urgency] || chipsAlerta.medium;
+          const topo = document.createElement('div');
+          topo.className = 'folha-topo';
+          const etiqueta = document.createElement('span');
+          etiqueta.className = `chip ${chip[0]}`;
+          etiqueta.textContent = chip[1];
+          const quando = document.createElement('span');
+          quando.textContent = `${item.neighborhood} · ${haQuanto(item.at)}`;
+          topo.append(etiqueta, quando);
+
+          const titulo = document.createElement('strong');
+          titulo.textContent = folha.titulo(quemE(item));
+          const detalhe = document.createElement('p');
+          detalhe.textContent = `${nomesEspecie[item.species] || 'Bichinho'} em ${item.neighborhood}, Belém.`;
+          const texto = document.createElement('div');
+          texto.append(titulo, detalhe);
+          const corpo = document.createElement('div');
+          corpo.className = 'folha-corpo';
+          corpo.append(foto(item.photo, ''), texto);
+
+          const botao = document.createElement('a');
+          botao.className = 'folha-botao';
+          botao.href = /^[A-Za-z0-9-]{1,64}$/.test(item.id) ? `/?post=${item.id}` : '#baixar';
+          botao.textContent = folha.botao;
+
+          celular.folha.replaceChildren(topo, corpo, botao);
+          celular.bairro.textContent = `${item.neighborhood}, Belém`;
+          celular.folha.classList.remove('trocando');
+        };
+        if (semMovimento) {
+          trocar();
+        } else {
+          celular.folha.classList.add('trocando');
+          setTimeout(trocar, 350);
+        }
+      }
+
+      function mostrarNoCelular(itens) {
+        if (!Array.isArray(itens) || itens.length === 0) return;
+        const conhecidos = new Set(celular.itens.map((item) => item.id));
+        const primeiraVez = conhecidos.size === 0;
+        celular.itens = itens.slice(0, 8);
+        const caixa = caixaDe(celular.itens);
+        celular.patas.replaceChildren(
+          ...celular.itens.map((item, i) => {
+            const pata = document.createElement('img');
+            const nivel = ['high', 'medium', 'low'].includes(item.urgency)
+              ? item.urgency
+              : 'medium';
+            pata.className = 'pata';
+            if (!conhecidos.has(item.id)) {
+              pata.classList.add('nova');
+              pata.style.animationDelay = `${i * 0.12}s`;
+            }
+            pata.src = `/img/pata-${nivel}.png`;
+            pata.alt = '';
+            const lugar = posicao(item, caixa);
+            pata.style.left = `${lugar.left}%`;
+            pata.style.top = `${lugar.top}%`;
+            return pata;
+          }),
+        );
+        document.getElementById('selo-vivo').hidden = false;
+        mostrarNaFolha(primeiraVez ? 0 : Math.min(celular.atual, celular.itens.length - 1));
+        clearInterval(celular.timer);
+        if (celular.itens.length > 1) {
+          celular.timer = setInterval(() => {
+            if (!document.hidden) mostrarNaFolha((celular.atual + 1) % celular.itens.length);
+          }, 5000);
+        }
+      }
+
       function buscarAoVivo() {
         if (document.hidden) return;
         fetch('/ao-vivo.json')
           .then((resposta) => (resposta.ok ? resposta.json() : null))
           .then((dados) => {
-            if (dados && dados.counts) mostrarAoVivo(dados);
+            if (!dados || !dados.counts) return;
+            mostrarAoVivo(dados);
+            mostrarNoCelular(dados.map);
           })
           .catch((erro) => {
             console.warn('Não foi possível ler os dados ao vivo', erro);
