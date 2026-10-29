@@ -495,6 +495,118 @@
         font-size: 0.8rem;
         font-weight: 800;
       }
+      .selo-vivo {
+        position: absolute;
+        top: 90px;
+        right: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--turquesa-900);
+        color: var(--creme);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .selo-vivo::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--coral);
+        animation: vivo 1.8s ease-out infinite;
+      }
+      .patas .pata {
+        transition:
+          left 0.6s ease,
+          top 0.6s ease;
+      }
+      .patas .pata.nova {
+        animation: cai 0.5s ease-out both;
+      }
+      .patas .pata.p1 {
+        z-index: 2;
+        width: 46px;
+        height: 46px;
+        animation: pulo 2.8s ease-in-out infinite;
+      }
+      @keyframes cai {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -170%);
+        }
+      }
+      .folha {
+        transition:
+          opacity 0.35s ease,
+          transform 0.35s ease;
+      }
+      .folha.trocando {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      .folha-topo span:last-child {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .folha-corpo {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .folha-corpo img {
+        flex: none;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        object-fit: cover;
+        background: var(--caramelo-100);
+      }
+      .folha-corpo strong {
+        margin-top: 0;
+      }
+      .folha-corpo p {
+        margin-top: 2px;
+      }
+      a.folha-botao {
+        text-decoration: none;
+      }
+      a.folha-botao:hover {
+        background: var(--turquesa-700);
+      }
+      .chip-atencao {
+        background: #fdf0dc;
+        color: #8a5a12;
+      }
+      .chip-calmo {
+        background: #e0f3ea;
+        color: #1f6b49;
+      }
+      .chip-perdido {
+        background: var(--turquesa-50);
+        color: var(--turquesa-700);
+      }
+      .chip-adocao {
+        background: var(--coral-50);
+        color: #a83b23;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .selo-vivo::before,
+        .patas .pata.p1,
+        .patas .pata.nova {
+          animation: none;
+        }
+        .folha,
+        .patas .pata {
+          transition: none;
+        }
+      }
       .vitrine .cupu {
         position: absolute;
         left: 0;
@@ -541,6 +653,183 @@
       .icone svg {
         width: 20px;
         height: 20px;
+      }
+
+      /* ---------- Ao vivo: dados reais do app (/ao-vivo.json) ---------- */
+      .ao-vivo {
+        background: var(--creme-fundo);
+        border-bottom: 1px solid var(--linha);
+      }
+      .ao-vivo .rotulo {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--coral-600);
+      }
+      .ponto-vivo {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--coral);
+        box-shadow: 0 0 0 0 rgb(242 107 78 / 0.6);
+        animation: vivo 1.8s ease-out infinite;
+      }
+      @keyframes vivo {
+        to {
+          box-shadow: 0 0 0 10px rgb(242 107 78 / 0);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .ponto-vivo {
+          animation: none;
+        }
+      }
+      .numeros {
+        list-style: none;
+        margin: 40px 0 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+      }
+      .numeros li {
+        padding: 20px 22px;
+        border-radius: var(--raio);
+        background: var(--branco);
+        border: 1px solid var(--linha);
+        font-size: var(--t-sm);
+        line-height: 1.35;
+        color: var(--tinta-suave);
+      }
+      .numeros b {
+        display: block;
+        font: 800 2.25rem / 1.1 var(--titulo);
+        color: var(--turquesa-800);
+        font-variant-numeric: tabular-nums;
+      }
+      .ao-vivo-grade {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+        gap: 32px;
+        margin-top: 40px;
+        align-items: start;
+      }
+      .ao-vivo h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--turquesa-800);
+      }
+      .bloco-vivo + .bloco-vivo {
+        margin-top: 32px;
+      }
+      .atividade {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 6px;
+        border-radius: var(--raio);
+        background: var(--branco);
+        border: 1px solid var(--linha);
+      }
+      .atividade li {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+        border-radius: 12px;
+      }
+      .atividade li + li {
+        border-top: 1px solid var(--linha);
+        border-radius: 0;
+      }
+      .atividade .miniatura {
+        flex: none;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+      }
+      .atividade b {
+        display: block;
+        font-size: var(--t-sm);
+        line-height: 1.3;
+      }
+      .atividade span {
+        font-size: var(--t-xs);
+        color: var(--tinta-suave);
+      }
+      .miniatura {
+        object-fit: cover;
+        background: var(--caramelo-100);
+      }
+      .cartoes {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .cartoes a {
+        display: block;
+        height: 100%;
+        border-radius: var(--raio);
+        overflow: hidden;
+        background: var(--branco);
+        border: 1px solid var(--linha);
+        text-decoration: none;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .cartoes a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 28px -18px rgb(15 63 63 / 0.6);
+      }
+      .cartoes .miniatura {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        border-radius: 0;
+      }
+      .cartoes div {
+        padding: 10px 12px 12px;
+      }
+      .cartoes b {
+        display: block;
+        font-size: var(--t-sm);
+        line-height: 1.3;
+      }
+      .cartoes span {
+        display: block;
+        line-height: 1.4;
+        font-size: var(--t-xs);
+        color: var(--tinta-suave);
+      }
+      .eventos-vivo {
+        list-style: none;
+        margin: 14px 0 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+      .eventos-vivo li {
+        padding: 14px 16px;
+        border-radius: var(--raio);
+        background: var(--branco);
+        border: 1px solid var(--linha);
+      }
+      .eventos-vivo b {
+        display: block;
+        font-size: var(--t-sm);
+      }
+      .eventos-vivo span {
+        display: block;
+        line-height: 1.4;
+        font-size: var(--t-xs);
+        color: var(--tinta-suave);
+      }
+      .ao-vivo-nota {
+        margin-top: 24px;
+        font-size: var(--t-xs);
+        color: var(--tinta-suave);
       }
 
       /* ---------- Seções ---------- */
@@ -1103,6 +1392,12 @@
         .selos {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+        .numeros {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .ao-vivo-grade {
+          grid-template-columns: minmax(0, 1fr);
+        }
         .jornada {
           grid-template-columns: repeat(2, minmax(0, 1fr));
           row-gap: 40px;
@@ -1165,6 +1460,12 @@
         }
         .selos {
           gap: 20px;
+        }
+        .cartoes {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .numeros b {
+          font-size: 1.75rem;
         }
         .recurso-arte {
           min-height: 300px;
@@ -1380,11 +1681,16 @@
               </div>
             </div>
 
-            <div class="vitrine" aria-hidden="true">
+            <div class="vitrine" aria-label="O app ao vivo: o que está acontecendo agora em Belém">
               <div class="celular">
                 <div class="tela">
                   <!-- Mapa ilustrativo: baía à esquerda, ruas e um parque -->
-                  <svg class="mapa" viewBox="0 0 276 548" preserveAspectRatio="xMidYMid slice">
+                  <svg
+                    class="mapa"
+                    aria-hidden="true"
+                    viewBox="0 0 276 548"
+                    preserveAspectRatio="xMidYMid slice"
+                  >
                     <rect width="276" height="548" fill="#EEF3EA" />
                     <path
                       d="M0 0h70c-14 60 10 110-6 170s-30 120-8 200-10 130-20 178H0z"
@@ -1410,18 +1716,31 @@
                   </svg>
                   <div class="tela-busca">
                     <svg aria-hidden="true"><use href="#i-busca" /></svg>
-                    Batista Campos, Belém
+                    <span id="tela-bairro">Batista Campos, Belém</span>
                   </div>
-                  <img
-                    class="pata p1"
-                    src="/img/pata-high.png"
-                    alt=""
-                    style="left: 46%; top: 39%"
-                  />
-                  <img class="pata" src="/img/pata-medium.png" alt="" style="left: 76%; top: 28%" />
-                  <img class="pata" src="/img/pata-low.png" alt="" style="left: 64%; top: 55%" />
-                  <img class="pata" src="/img/pata-medium.png" alt="" style="left: 34%; top: 61%" />
-                  <div class="folha">
+                  <span class="selo-vivo" id="selo-vivo" hidden>Ao vivo</span>
+                  <div class="patas" id="patas">
+                    <img
+                      class="pata p1"
+                      src="/img/pata-high.png"
+                      alt=""
+                      style="left: 46%; top: 39%"
+                    />
+                    <img
+                      class="pata"
+                      src="/img/pata-medium.png"
+                      alt=""
+                      style="left: 76%; top: 28%"
+                    />
+                    <img class="pata" src="/img/pata-low.png" alt="" style="left: 64%; top: 55%" />
+                    <img
+                      class="pata"
+                      src="/img/pata-medium.png"
+                      alt=""
+                      style="left: 34%; top: 61%"
+                    />
+                  </div>
+                  <div class="folha" id="folha" aria-live="polite">
                     <div class="folha-topo">
                       <span class="chip chip-urgente">Urgente</span> a ~1 km · há 12 min
                     </div>
@@ -1471,6 +1790,54 @@
                 <span><b>Venda proibida</b>Aqui bicho se adota. Anúncio de venda sai do ar.</span>
               </li>
             </ul>
+          </div>
+        </section>
+
+        <!-- Preenchida pelo script com /ao-vivo.json (dados públicos do app). Sem dados, fica escondida. -->
+        <section class="secao ao-vivo" id="ao-vivo" aria-labelledby="titulo-ao-vivo" hidden>
+          <div class="contido">
+            <div class="secao-cabeca">
+              <span class="rotulo"
+                ><span class="ponto-vivo" aria-hidden="true"></span>Ao vivo no app</span
+              >
+              <h2 id="titulo-ao-vivo">Acontecendo agora em Belém</h2>
+              <p>
+                Tudo aqui vem direto do app e se atualiza sozinho. Do alerta na calçada até a
+                adoção, cada passo aparece para a cidade inteira.
+              </p>
+            </div>
+            <ul class="numeros">
+              <li><b id="n-adocao">0</b>esperando uma família</li>
+              <li><b id="n-perdidos">0</b>perdidos procurando o caminho de casa</li>
+              <li><b id="n-resgatados">0</b>saíram da rua com ajuda dos vizinhos</li>
+              <li><b id="n-adotados">0</b>já ganharam uma família</li>
+            </ul>
+            <div class="ao-vivo-grade">
+              <div>
+                <div class="bloco-vivo" id="bloco-atividade" hidden>
+                  <h3>Últimas do app</h3>
+                  <ul class="atividade" id="lista-atividade" aria-live="polite"></ul>
+                </div>
+                <div class="bloco-vivo" id="bloco-eventos" hidden>
+                  <h3>Próximos eventos</h3>
+                  <ul class="eventos-vivo" id="lista-eventos"></ul>
+                </div>
+              </div>
+              <div>
+                <div class="bloco-vivo" id="bloco-adocao" hidden>
+                  <h3>Esperando uma família</h3>
+                  <ul class="cartoes" id="lista-adocao"></ul>
+                </div>
+                <div class="bloco-vivo" id="bloco-perdidos" hidden>
+                  <h3>Ajude a achar</h3>
+                  <ul class="cartoes" id="lista-perdidos"></ul>
+                </div>
+              </div>
+            </div>
+            <p class="ao-vivo-nota">
+              Aqui aparecem só o bichinho e o bairro. Endereço, contato e quem publicou ficam no
+              app. <span id="ao-vivo-hora"></span>
+            </p>
           </div>
         </section>
 
@@ -1935,6 +2302,311 @@
           : `egua://post/${postCompartilhado}`;
         document.getElementById('convite').hidden = false;
       }
+
+      // Ao vivo: o nginx repassa /ao-vivo.json para a API do app (/stats/live) e /fotos/ para o
+      // servidor de fotos, porque os dois ainda são HTTP e o site é HTTPS. Se a API não responder,
+      // a seção continua escondida (ou mostra os últimos dados que chegaram).
+      const aoVivo = document.getElementById('ao-vivo');
+      const quando = new Intl.RelativeTimeFormat('pt-BR', { numeric: 'auto' });
+      const dataEvento = new Intl.DateTimeFormat('pt-BR', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'America/Belem',
+      });
+      const especies = { dog: 'Um cachorro', cat: 'Um gato' };
+      const categorias = {
+        adoption_fair: 'Feira de adoção',
+        vaccination: 'Vacinação',
+        neutering: 'Castração',
+        fundraising: 'Arrecadação',
+        community: 'Mutirão',
+      };
+      const frases = {
+        alert: (quem) => `${quem} precisa de ajuda`,
+        lost: (quem) => `${quem} se perdeu`,
+        rescued: (quem) => `${quem} saiu da rua`,
+        home: (quem) => `${quem} voltou para casa`,
+        fostered: (quem) => `${quem} ganhou um lar temporário`,
+        for_adoption: (quem) => `${quem} procura uma família`,
+        adopted: (quem) => `${quem} ganhou uma família`,
+      };
+
+      function quemE(bicho) {
+        return bicho.name || especies[bicho.species] || 'Um bichinho';
+      }
+
+      function haQuanto(iso) {
+        const segundos = (new Date(iso).getTime() - Date.now()) / 1000;
+        const passos = [
+          [60, 'second'],
+          [60, 'minute'],
+          [24, 'hour'],
+          [30, 'day'],
+          [12, 'month'],
+        ];
+        let valor = segundos;
+        for (const [tamanho, unidade] of passos) {
+          if (Math.abs(valor) < tamanho) {
+            return unidade === 'second'
+              ? 'agora há pouco'
+              : quando.format(Math.round(valor), unidade);
+          }
+          valor /= tamanho;
+        }
+        return quando.format(Math.round(valor), 'year');
+      }
+
+      // As fotos do servidor do app chegam por HTTP; essas vão pelo próprio site.
+      function foto(endereco, alt) {
+        const reserva = '/img/cupu-fareja.webp';
+        const img = document.createElement('img');
+        img.className = 'miniatura';
+        img.alt = alt;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        // Foto que não carrega vira o Cupu, em vez do ícone de imagem quebrada.
+        img.addEventListener('error', () => (img.src = reserva), { once: true });
+        let caminho = null;
+        try {
+          const url = endereco ? new URL(endereco) : null;
+          if (url) caminho = url.protocol === 'https:' ? url.href : '/fotos' + url.pathname;
+        } catch {
+          caminho = null;
+        }
+        img.src = caminho || reserva;
+        return img;
+      }
+
+      function linha(titulo, detalhe) {
+        const caixa = document.createElement('div');
+        const b = document.createElement('b');
+        b.textContent = titulo;
+        const span = document.createElement('span');
+        span.textContent = detalhe;
+        caixa.append(b, span);
+        return caixa;
+      }
+
+      function preencher(lista, bloco, itens, montar) {
+        const ul = document.getElementById(lista);
+        ul.replaceChildren(...itens.map(montar));
+        document.getElementById(bloco).hidden = itens.length === 0;
+      }
+
+      function cartao(bicho, detalhe) {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        // Abre o convite do topo, que leva o post para o app (ou para o download).
+        a.href = /^[A-Za-z0-9-]{1,64}$/.test(bicho.id) ? `/?post=${bicho.id}` : '#baixar';
+        a.append(foto(bicho.photo, `Foto de ${quemE(bicho)}`), linha(quemE(bicho), detalhe));
+        li.append(a);
+        return li;
+      }
+
+      function mostrarAoVivo(dados) {
+        const n = dados.counts || {};
+        const numero = (id, valor) => {
+          document.getElementById(id).textContent = Number(valor || 0).toLocaleString('pt-BR');
+        };
+        numero('n-adocao', n.forAdoption);
+        numero('n-perdidos', n.lostNow);
+        numero('n-resgatados', (n.rescued || 0) + (n.backHome || 0));
+        numero('n-adotados', n.adopted);
+
+        const atividade = (dados.activity || []).filter((item) => frases[item.kind]).slice(0, 6);
+        preencher('lista-atividade', 'bloco-atividade', atividade, (item) => {
+          const li = document.createElement('li');
+          li.append(
+            foto(item.photo, ''),
+            linha(frases[item.kind](quemE(item)), `${item.neighborhood} · ${haQuanto(item.at)}`),
+          );
+          return li;
+        });
+        preencher('lista-adocao', 'bloco-adocao', dados.forAdoption || [], (bicho) =>
+          cartao(bicho, bicho.neighborhood),
+        );
+        preencher('lista-perdidos', 'bloco-perdidos', dados.lost || [], (bicho) =>
+          cartao(bicho, `${bicho.neighborhood} · sumiu ${haQuanto(bicho.at)}`),
+        );
+        preencher('lista-eventos', 'bloco-eventos', dados.events || [], (evento) => {
+          const li = document.createElement('li');
+          const tipo = categorias[evento.category] || 'Evento';
+          li.append(
+            linha(
+              evento.title,
+              `${tipo} · ${evento.neighborhood} · ${dataEvento.format(new Date(evento.startsAt))}`,
+            ),
+          );
+          return li;
+        });
+        document.getElementById('ao-vivo-hora').textContent =
+          `Atualizado ${haQuanto(dados.updatedAt || new Date().toISOString())}.`;
+        aoVivo.hidden = false;
+      }
+
+      // Celular do topo ao vivo: as patas são os bichos que ainda precisam de alguém (ponto
+      // aproximado, como no mapa público do app) e a folha de baixo passa por eles, um de cada vez.
+      const celular = {
+        patas: document.getElementById('patas'),
+        folha: document.getElementById('folha'),
+        bairro: document.getElementById('tela-bairro'),
+        itens: [],
+        atual: 0,
+        timer: null,
+      };
+      const semMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const chipsAlerta = {
+        high: ['chip-urgente', 'Urgente'],
+        medium: ['chip-atencao', 'Atenção'],
+        low: ['chip-calmo', 'Pode esperar'],
+      };
+      const folhas = {
+        alert: { titulo: (quem) => `${quem} precisa de ajuda`, botao: 'Vou ajudar' },
+        lost: {
+          chip: ['chip-perdido', 'Perdido'],
+          titulo: (quem) => `${quem} se perdeu`,
+          botao: 'Vi esse bicho',
+        },
+        for_adoption: {
+          chip: ['chip-adocao', 'Para adoção'],
+          titulo: (quem) => `${quem} procura uma família`,
+          botao: 'Quero adotar',
+        },
+      };
+      const nomesEspecie = { dog: 'Cachorro', cat: 'Gato' };
+
+      // Belém urbana cabe neste retângulo. A baía fica à esquerda do desenho, então as patas
+      // ocupam o lado das ruas e a parte de cima, acima da folha.
+      function posicao(item, caixa) {
+        const { latitude, longitude } = item.location || {};
+        let hash = 0;
+        for (const letra of item.id) hash = (hash * 31 + letra.charCodeAt(0)) | 0;
+        const desvio = (n) => (((hash >> n) & 15) - 7.5) * 0.5;
+        const limitar = (v, min, max) => Math.min(max, Math.max(min, v));
+        const x = Number.isFinite(longitude) ? (longitude - caixa.oeste) / caixa.largura : 0.5;
+        const y = Number.isFinite(latitude) ? (caixa.norte - latitude) / caixa.altura : 0.5;
+        return {
+          left: limitar(36 + x * 52 + desvio(0), 32, 90),
+          top: limitar(24 + y * 34 + desvio(4), 22, 60),
+        };
+      }
+
+      // A área das patas acompanha onde elas estão, para não ficarem todas amontoadas no meio.
+      function caixaDe(itens) {
+        const pontos = itens.map((item) => item.location || {});
+        const lats = pontos.map((p) => p.latitude).filter(Number.isFinite);
+        const lngs = pontos.map((p) => p.longitude).filter(Number.isFinite);
+        if (lats.length === 0) return { oeste: -48.51, largura: 0.09, norte: -1.36, altura: 0.12 };
+        const largura = Math.max(Math.max(...lngs) - Math.min(...lngs), 0.02);
+        const altura = Math.max(Math.max(...lats) - Math.min(...lats), 0.02);
+        return {
+          oeste: (Math.max(...lngs) + Math.min(...lngs)) / 2 - largura / 2,
+          largura,
+          norte: (Math.max(...lats) + Math.min(...lats)) / 2 + altura / 2,
+          altura,
+        };
+      }
+
+      function mostrarNaFolha(indice) {
+        const item = celular.itens[indice];
+        if (!item) return;
+        celular.atual = indice;
+        for (const [i, pata] of [...celular.patas.children].entries()) {
+          pata.classList.toggle('p1', i === indice);
+        }
+        const trocar = () => {
+          const folha = folhas[item.kind] || folhas.alert;
+          const chip = folha.chip || chipsAlerta[item.urgency] || chipsAlerta.medium;
+          const topo = document.createElement('div');
+          topo.className = 'folha-topo';
+          const etiqueta = document.createElement('span');
+          etiqueta.className = `chip ${chip[0]}`;
+          etiqueta.textContent = chip[1];
+          const quando = document.createElement('span');
+          quando.textContent = `${item.neighborhood} · ${haQuanto(item.at)}`;
+          topo.append(etiqueta, quando);
+
+          const titulo = document.createElement('strong');
+          titulo.textContent = folha.titulo(quemE(item));
+          const detalhe = document.createElement('p');
+          detalhe.textContent = `${nomesEspecie[item.species] || 'Bichinho'} em ${item.neighborhood}, Belém.`;
+          const texto = document.createElement('div');
+          texto.append(titulo, detalhe);
+          const corpo = document.createElement('div');
+          corpo.className = 'folha-corpo';
+          corpo.append(foto(item.photo, ''), texto);
+
+          const botao = document.createElement('a');
+          botao.className = 'folha-botao';
+          botao.href = /^[A-Za-z0-9-]{1,64}$/.test(item.id) ? `/?post=${item.id}` : '#baixar';
+          botao.textContent = folha.botao;
+
+          celular.folha.replaceChildren(topo, corpo, botao);
+          celular.bairro.textContent = `${item.neighborhood}, Belém`;
+          celular.folha.classList.remove('trocando');
+        };
+        if (semMovimento) {
+          trocar();
+        } else {
+          celular.folha.classList.add('trocando');
+          setTimeout(trocar, 350);
+        }
+      }
+
+      function mostrarNoCelular(itens) {
+        if (!Array.isArray(itens) || itens.length === 0) return;
+        const conhecidos = new Set(celular.itens.map((item) => item.id));
+        const primeiraVez = conhecidos.size === 0;
+        celular.itens = itens.slice(0, 8);
+        const caixa = caixaDe(celular.itens);
+        celular.patas.replaceChildren(
+          ...celular.itens.map((item, i) => {
+            const pata = document.createElement('img');
+            const nivel = ['high', 'medium', 'low'].includes(item.urgency)
+              ? item.urgency
+              : 'medium';
+            pata.className = 'pata';
+            if (!conhecidos.has(item.id)) {
+              pata.classList.add('nova');
+              pata.style.animationDelay = `${i * 0.12}s`;
+            }
+            pata.src = `/img/pata-${nivel}.png`;
+            pata.alt = '';
+            const lugar = posicao(item, caixa);
+            pata.style.left = `${lugar.left}%`;
+            pata.style.top = `${lugar.top}%`;
+            return pata;
+          }),
+        );
+        document.getElementById('selo-vivo').hidden = false;
+        mostrarNaFolha(primeiraVez ? 0 : Math.min(celular.atual, celular.itens.length - 1));
+        clearInterval(celular.timer);
+        if (celular.itens.length > 1) {
+          celular.timer = setInterval(() => {
+            if (!document.hidden) mostrarNaFolha((celular.atual + 1) % celular.itens.length);
+          }, 5000);
+        }
+      }
+
+      function buscarAoVivo() {
+        if (document.hidden) return;
+        fetch('/ao-vivo.json')
+          .then((resposta) => (resposta.ok ? resposta.json() : null))
+          .then((dados) => {
+            if (!dados || !dados.counts) return;
+            mostrarAoVivo(dados);
+            mostrarNoCelular(dados.map);
+          })
+          .catch((erro) => {
+            console.warn('Não foi possível ler os dados ao vivo', erro);
+          });
+      }
+      buscarAoVivo();
+      setInterval(buscarAoVivo, 60000);
+      document.addEventListener('visibilitychange', buscarAoVivo);
 
       // O APK fica no volume do container; o botão só libera quando ele existe.
       const botao = document.getElementById('botao-baixar');
