@@ -92,6 +92,18 @@ export const icons = {
       <path d="M16 3v4M8 3v4M3 10h18" />
     </Icon>
   ),
+  coin: (
+    <Icon>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .8-3 2s1.3 1.7 3 2 3 .8 3 2-1.3 2-3 2c-1.4 0-2.5-.5-3-1.5M12 6v2M12 16v2" />
+    </Icon>
+  ),
+  shop: (
+    <Icon>
+      <path d="M4 10v10h16V10M3 6l1.5-3h15L21 6v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0Z" />
+      <path d="M10 20v-5h4v5" />
+    </Icon>
+  ),
   clock: (
     <Icon>
       <circle cx="12" cy="12" r="9" />
