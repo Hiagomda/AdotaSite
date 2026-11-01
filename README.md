@@ -10,6 +10,7 @@ Site público e painel administrativo do app Égua, adota!, separados do reposit
 ## Site
 
 - `site/index.html`: abas Conheça (`#sobre`) e Baixar (`#baixar`).
+- Seção **Ao vivo** (aba Conheça): o script lê `/ao-vivo.json`, que o nginx do site repassa para `GET /stats/live` da API do app, com um minuto de cache. Fotos vêm por `/fotos/`, repassado ao servidor de fotos. Só sai bicho, bairro e foto. Se a API não responder, a seção fica escondida.
 - `site/version.json`: versão que o app lê ao abrir para oferecer atualização. Atualize a cada release.
 - `site/Dockerfile`: o `ARG APK_URL` aponta para o APK do release `apk-<version>-<build>` no repositório do app. O container baixa o arquivo no build e serve em `/egua-adota.apk`.
 
