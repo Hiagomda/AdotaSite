@@ -107,6 +107,24 @@ interface OverviewData {
   openReports: number;
   pendingVerifications: number;
   meanSecondsToResponse: number | null;
+  /** Some na API anterior a esta versão do painel. */
+  rescues30d?: {
+    created: number;
+    safe: number;
+    stillOpen: number;
+    notFound: number;
+    medianHoursToSafe: number | null;
+  };
+}
+
+function hours(value: number | null): string {
+  if (value === null) return '—';
+  if (value < 1) return `${Math.round(value * 60)} min`;
+  return `${value.toFixed(1).replace('.', ',')} h`;
+}
+
+function share(part: number, total: number): string {
+  return total === 0 ? '' : ` (${Math.round((part / total) * 100)}%)`;
 }
 
 function minutes(seconds: number | null): string {
@@ -256,6 +274,40 @@ function Overview({ me }: { me: StaffMe }) {
         />
         <Stat icon={icons.ban} value={String(data.usersSuspended)} label="Contas suspensas" />
       </div>
+      {data.rescues30d ? (
+        <>
+          <h2 className="section-title">Resgates nos últimos 30 dias</h2>
+          <div className="grid">
+            <Stat
+              icon={icons.paw}
+              value={String(data.rescues30d.created)}
+              label="Avisos de resgate publicados"
+            />
+            <Stat
+              icon={icons.heart}
+              tone="coral"
+              value={`${data.rescues30d.safe}${share(data.rescues30d.safe, data.rescues30d.created)}`}
+              label="Saíram da rua (resgatado, lar temporário, adoção)"
+            />
+            <Stat
+              icon={icons.clock}
+              tone="caramel"
+              value={hours(data.rescues30d.medianHoursToSafe)}
+              label="Tempo do aviso até sair da rua (mediana)"
+            />
+            <Stat
+              icon={icons.flag}
+              value={String(data.rescues30d.stillOpen)}
+              label="Ainda na rua (aberto ou a caminho)"
+            />
+            <Stat
+              icon={icons.ban}
+              value={String(data.rescues30d.notFound)}
+              label="Não encontrados"
+            />
+          </div>
+        </>
+      ) : null}
     </>
   );
 }
