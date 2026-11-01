@@ -2,8 +2,17 @@ import { readJson, rejectCrossOrigin, upstream } from '../../../../lib/bff';
 
 type Context = { params: Promise<{ path: string[] }> };
 
-const sections = new Set(['overview', 'reports', 'verifications', 'posts', 'users', 'events']);
-const actions = new Set(['review', 'visibility', 'suspend', 'reports']);
+const sections = new Set([
+  'overview',
+  'reports',
+  'verifications',
+  'posts',
+  'users',
+  'events',
+  'campaigns',
+  'partners',
+]);
+const actions = new Set(['review', 'visibility', 'suspend', 'reports', 'status', 'feature']);
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** Repassa só as rotas de moderação conhecidas, para o navegador não alcançar outra rota da API. */

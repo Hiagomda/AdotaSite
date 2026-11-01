@@ -15,7 +15,7 @@ import {
 
 interface Report {
   id: string;
-  targetType: 'post' | 'comment' | 'user';
+  targetType: 'post' | 'comment' | 'user' | 'campaign';
   targetId: string;
   reason: string;
   status: string;
@@ -27,11 +27,17 @@ interface Report {
   reportCount: number;
 }
 
-const targetLabel = { post: 'Post', comment: 'Comentário', user: 'Perfil' } as const;
+const targetLabel = {
+  post: 'Post',
+  comment: 'Comentário',
+  user: 'Perfil',
+  campaign: 'Campanha',
+} as const;
 const hideLabel = {
   post: 'Tirar o post do ar',
   comment: 'Esconder o comentário',
   user: 'Suspender a conta',
+  campaign: 'Suspender a campanha',
 } as const;
 
 const tabs = [
