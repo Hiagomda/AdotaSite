@@ -35,11 +35,77 @@ interface Partner {
   ownerHandle: string;
   ownerName: string;
   ownerVerified: boolean;
+  /** Último dia pago (AAAA-MM-DD). */
+  paidUntil?: string | null;
+  paid?: boolean;
+}
+
+function day(value: string): string {
+  const [year, month, date] = value.split('-');
+  return year && month && date ? `${date}/${month}/${year}` : value;
+}
+
+/**
+ * Chave geral dos anúncios. Desligada, nenhum parceiro aparece no app (nem nos APKs antigos) e
+ * ninguém consegue pedir cadastro. Só admin e superadmin mudam.
+ */
+function AdsSwitch({ canChange, listed }: { canChange: boolean; listed?: boolean }) {
+  const { data, message, reload } = useModeration<{ partnersEnabled: boolean }>(
+    canChange ? 'settings' : null,
+  );
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const enabled = data?.partnersEnabled ?? listed;
+
+  async function toggle() {
+    if (enabled === undefined) return;
+    setBusy(true);
+    setError('');
+    const failure = await moderate('settings', { partnersEnabled: !enabled });
+    setBusy(false);
+    if (failure) setError(failure);
+    reload();
+  }
+
+  return (
+    <div className="card stack">
+      <div className="row">
+        <span className={`badge${enabled ? ' ok' : ' warn'}`}>
+          {enabled === undefined
+            ? 'Carregando…'
+            : enabled
+              ? 'Anúncios ligados'
+              : 'Anúncios desligados'}
+        </span>
+      </div>
+      <p className="muted">
+        {enabled
+          ? 'Os parceiros pagos aparecem no mapa e no feed, e o app mostra o "Anuncie aqui".'
+          : 'Nenhum parceiro aparece no app e ninguém consegue pedir cadastro. Ligue quando o app tiver público.'}
+      </p>
+      {message ? <p className="error">{message}</p> : null}
+      {error ? <p className="error">{error}</p> : null}
+      {canChange ? (
+        <div className="actions">
+          <button
+            type="button"
+            className={enabled ? 'danger' : undefined}
+            disabled={busy || enabled === undefined}
+            onClick={() => void toggle()}
+          >
+            {enabled ? 'Desligar anúncios' : 'Ligar anúncios'}
+          </button>
+        </div>
+      ) : (
+        <p className="muted">Só admin ou superadmin liga e desliga.</p>
+      )}
+    </div>
+  );
 }
 
 const filters = [
   { value: 'pending', label: 'Esperando aprovação' },
-  { value: 'approved', label: 'No mapa' },
+  { value: 'approved', label: 'Aprovados' },
   { value: 'paused', label: 'Pausados' },
   { value: 'rejected', label: 'Recusados' },
 ] as const;
@@ -53,7 +119,7 @@ export default function PartnersPage() {
   const me = useStaff();
   const [filter, setFilter] = useState<(typeof filters)[number]['value']>('pending');
   const allowed = Boolean(me?.permissions.includes('posts.moderate'));
-  const { data, message, reload } = useModeration<{ partners: Partner[] }>(
+  const { data, message, reload } = useModeration<{ partners: Partner[]; enabled?: boolean }>(
     allowed ? `partners?filter=${filter}` : null,
   );
   const [error, setError] = useState('');
@@ -66,6 +132,12 @@ export default function PartnersPage() {
     setBusy(null);
     if (failure) setError(failure);
     reload();
+  }
+
+  function paidUntil(partner: Partner, form: FormEvent<HTMLFormElement>) {
+    form.preventDefault();
+    const value = String(new FormData(form.currentTarget).get('paidUntil') ?? '');
+    void run(partner, 'paid', { paidUntil: value || null });
   }
 
   function withNote(
@@ -85,7 +157,11 @@ export default function PartnersPage() {
           <>
             <PageHeader
               title="Parceiros do Cupu"
-              subtitle="Petshops, clínicas e lojas que pediram para aparecer no mapa. O cadastro é de graça em troca de uma vantagem para quem adota ou resgata."
+              subtitle="Petshops, clínicas e lojas que pediram para aparecer no mapa. O anúncio é pago: combine o valor com o parceiro pelo WhatsApp e marque aqui até quando ele vale. O app não recebe dinheiro."
+            />
+            <AdsSwitch
+              canChange={staff.permissions.includes('settings.manage')}
+              listed={data?.enabled}
             />
             <div className="tabs">
               {filters.map((item) => (
@@ -114,8 +190,13 @@ export default function PartnersPage() {
                       {partner.status === 'pending' ? (
                         <span className="badge warn">Esperando aprovação</span>
                       ) : null}
-                      {partner.status === 'approved' && !partner.paused ? (
-                        <span className="badge ok">No mapa</span>
+                      {partner.status === 'approved' && !partner.paused && partner.paid ? (
+                        <span className="badge ok">
+                          {data?.enabled === false ? 'Pago (anúncios desligados)' : 'No mapa'}
+                        </span>
+                      ) : null}
+                      {partner.status === 'approved' && !partner.paid ? (
+                        <span className="badge warn">Falta o pagamento</span>
                       ) : null}
                       {partner.status === 'approved' && partner.paused ? (
                         <span className="badge">Pausado pelo dono</span>
@@ -152,6 +233,11 @@ export default function PartnersPage() {
                       Pedido de {partner.ownerName} @{partner.ownerHandle}
                       {partner.ownerVerified ? ' · verificado' : ' · sem selo'} · enviado em{' '}
                       {formatDate(partner.createdAt)}
+                    </p>
+                    <p className="muted">
+                      {partner.paidUntil
+                        ? `Pago até ${day(partner.paidUntil)}${partner.paid ? '' : ' (vencido)'}`
+                        : 'Sem pagamento marcado'}
                     </p>
                     {partner.reviewNote ? (
                       <p className="muted">Motivo registrado: {partner.reviewNote}</p>
@@ -192,6 +278,21 @@ export default function PartnersPage() {
                           {partner.featured ? 'Tirar do destaque' : 'Pôr no destaque do feed'}
                         </button>
                       </div>
+                    ) : null}
+                    {partner.status !== 'rejected' ? (
+                      <form className="actions" onSubmit={(form) => paidUntil(partner, form)}>
+                        <label>
+                          Pago até
+                          <input
+                            name="paidUntil"
+                            type="date"
+                            defaultValue={partner.paidUntil ?? ''}
+                          />
+                        </label>
+                        <button type="submit" className="quiet" disabled={busy === partner.id}>
+                          Salvar pagamento
+                        </button>
+                      </form>
                     ) : null}
                     {partner.status === 'pending' ? (
                       <form

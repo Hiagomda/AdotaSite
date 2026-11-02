@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent, type ReactNode } from 'react';
+import { MapPicker, type Point } from './MapPicker';
 import { moderate } from './painel';
 
 const categories = [
@@ -83,6 +84,13 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
   const [error, setError] = useState('');
   const [done, setDone] = useState('');
   const [clientKey, setClientKey] = useState(key);
+  const [point, setPoint] = useState<Point | null>(null);
+  const [pointText, setPointText] = useState('');
+
+  function pick(next: Point) {
+    setPoint(next);
+    setPointText(`${next.latitude}, ${next.longitude}`);
+  }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -90,9 +98,8 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
     const form = new FormData(element);
     setError('');
     setDone('');
-    const point = parsePoint(text(form, 'point'));
     if (!point) {
-      setError('Cole as coordenadas do local, por exemplo -1.4569, -48.4889.');
+      setError('Clique no mapa onde vai ser o evento.');
       return;
     }
     const day = text(form, 'day');
@@ -118,6 +125,8 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
       return;
     }
     element.reset();
+    setPoint(null);
+    setPointText('');
     setClientKey(key());
     setDone(`"${payload.title}" foi publicado na agenda.`);
     onCreated();
@@ -153,13 +162,25 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
         Local
         <input name="placeLabel" required maxLength={160} placeholder="Praça Batista Campos" />
       </label>
-      <label>
-        Coordenadas do local
-        <input name="point" required placeholder="-1.4569, -48.4889" />
+      <div className="stack">
+        <strong>Onde vai ser</strong>
         <span className="muted hint">
-          No Google Maps, toque e segure no lugar e copie os números que aparecem.
+          Clique no mapa no lugar do evento. É esse ponto que aparece no mapa do app.
         </span>
-      </label>
+        <MapPicker value={point} onChange={pick} />
+        <label>
+          Ou cole as coordenadas
+          <input
+            value={pointText}
+            onChange={(event) => {
+              setPointText(event.target.value);
+              const parsed = parsePoint(event.target.value);
+              if (parsed) setPoint(parsed);
+            }}
+            placeholder="-1.4569, -48.4889"
+          />
+        </label>
+      </div>
       <div className="form-row">
         <label>
           Dia

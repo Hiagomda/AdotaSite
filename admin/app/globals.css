@@ -903,3 +903,13 @@ th {
 .form-row input {
   min-width: 0;
 }
+
+/* Mapa de escolher o local do evento (MapPicker). */
+.map-picker {
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  z-index: 0;
+}
