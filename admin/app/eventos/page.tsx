@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { CreateEvent } from '../criar';
 import { icons } from '../icons';
 import {
   Empty,
@@ -115,6 +116,7 @@ export default function EventsPage() {
               title="Eventos"
               subtitle="Aprove os eventos da agenda, confira as denúncias e tire do ar o que fere as regras. Horários de Belém."
             />
+            <CreateEvent onCreated={reload} />
             <div className="tabs">
               {filters.map((item) => (
                 <button
