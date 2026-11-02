@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { CreateCampaign } from '../criar';
 import { icons } from '../icons';
 import {
   Empty,
@@ -89,6 +90,7 @@ export default function CampaignsPage() {
               title="Campanhas"
               subtitle="Arrecadações abertas no app. O valor arrecadado só soma o que o responsável confirmou com comprovante. Suspender tira o Pix do ar e avisa o responsável."
             />
+            <CreateCampaign onCreated={reload} />
             <div className="tabs">
               {filters.map((item) => (
                 <button

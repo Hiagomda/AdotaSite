@@ -877,3 +877,29 @@ th {
     font-size: 1.8rem;
   }
 }
+
+/* Formulários de criar evento e campanha */
+.create-form {
+  max-width: 640px;
+}
+
+.form-row {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+}
+
+.hint {
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.ok-text {
+  color: var(--primary-strong);
+  font-weight: 700;
+}
+
+.form-row > label,
+.form-row input {
+  min-width: 0;
+}
