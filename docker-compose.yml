@@ -12,12 +12,13 @@ services:
     build:
       context: ./admin
       args:
-        ADMIN_MEDIA_ORIGIN: http://imgproxy-fpmewu0com3qkbfihrsihc6y.86.48.25.233.sslip.io
+        # Novo domínio primeiro; o sslip fica enquanto houver foto com o endereço antigo.
+        ADMIN_MEDIA_ORIGIN: https://img.eguaadota.com.br http://imgproxy-fpmewu0com3qkbfihrsihc6y.86.48.25.233.sslip.io
     environment:
       SERVICE_URL_ADMIN_3020: https://admin-fpmewu0com3qkbfihrsihc6y.86.48.25.233.sslip.io
       NODE_ENV: production
       # A mesma API do app. É outro recurso do Coolify, então vai pelo endereço público.
-      ADMIN_API_URL: http://api-fpmewu0com3qkbfihrsihc6y.86.48.25.233.sslip.io
+      ADMIN_API_URL: https://api.eguaadota.com.br
     restart: unless-stopped
     mem_limit: 256m
 
