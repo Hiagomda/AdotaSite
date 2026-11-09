@@ -16,7 +16,7 @@ pnpm dev                     # http://localhost:3020
 
 ## Subir no Coolify
 
-O serviço `admin` do `docker-compose.yml` da raiz sobe o painel em `https://admin-…sslip.io`, com `ADMIN_API_URL` apontando para a API do app. Na API do app (repositório `adota`) precisa estar `ADMIN_ORIGIN` com o endereço do painel.
+O serviço `admin` do `docker-compose.yml` da raiz sobe o painel em `https://admin.eguaadota.com.br` (e no sslip antigo), com `ADMIN_API_URL` apontando para a API do app. Na API do app (repositório `adota`) precisa estar `ADMIN_ORIGIN` com o endereço do painel.
 
 ## Criar um login
 

@@ -5,7 +5,7 @@ const scriptSrc =
     ? "script-src 'self' 'unsafe-inline'"
     : "script-src 'self' 'unsafe-inline' 'unsafe-eval'";
 
-// Miniaturas dos posts vêm do imgproxy, em outro host. Lido no build.
+// Miniaturas dos posts vêm do imgproxy, em outro host. Lido no build; aceita vários endereços separados por espaço.
 const mediaOrigin = process.env.ADMIN_MEDIA_ORIGIN ?? 'http://localhost:8080';
 
 const nextConfig: NextConfig = {
