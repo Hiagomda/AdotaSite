@@ -11,8 +11,17 @@ const sections = new Set([
   'events',
   'campaigns',
   'partners',
+  'chats',
 ]);
-const actions = new Set(['review', 'visibility', 'suspend', 'reports', 'status', 'feature']);
+const actions = new Set([
+  'review',
+  'visibility',
+  'suspend',
+  'reports',
+  'status',
+  'feature',
+  'hide',
+]);
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** Repassa só as rotas de moderação conhecidas, para o navegador não alcançar outra rota da API. */

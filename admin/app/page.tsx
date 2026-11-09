@@ -106,6 +106,8 @@ interface OverviewData {
   pendingReview: number;
   openReports: number;
   pendingVerifications: number;
+  /** Some na API anterior às conversas monitoradas. */
+  flaggedChats?: number;
   meanSecondsToResponse: number | null;
   /** Some na API anterior a esta versão do painel. */
   rescues30d?: {
@@ -191,6 +193,13 @@ function Overview({ me }: { me: StaffMe }) {
       href: '/denuncias',
       permission: 'reports.manage',
       icon: icons.flag,
+    },
+    {
+      label: 'Conversas sinalizadas',
+      value: data.flaggedChats ?? 0,
+      href: '/conversas',
+      permission: 'chats.moderate',
+      icon: icons.chat,
     },
     {
       label: 'Posts esperando revisão',

@@ -57,6 +57,8 @@ interface Counts {
   openReports: number;
   pendingReview: number;
   pendingVerifications: number;
+  /** Some na API anterior às conversas monitoradas. */
+  flaggedChats?: number;
 }
 
 const sections: {
@@ -73,6 +75,13 @@ const sections: {
     icon: icons.flag,
     permission: 'reports.manage',
     count: 'openReports',
+  },
+  {
+    href: '/conversas',
+    label: 'Conversas',
+    icon: icons.chat,
+    permission: 'chats.moderate',
+    count: 'flaggedChats',
   },
   {
     href: '/posts',
@@ -127,7 +136,7 @@ export function Frame({ me, children }: { me: StaffMe; children: ReactNode }) {
             .filter((item) => !item.permission || me.permissions.includes(item.permission))
             .map((item) => {
               const active = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-              const count = item.count && counts ? counts[item.count] : 0;
+              const count = (item.count && counts ? counts[item.count] : 0) ?? 0;
               return (
                 <Link
                   key={item.href}
