@@ -903,3 +903,64 @@ th {
 .form-row input {
   min-width: 0;
 }
+
+/* Conversas de adoção */
+.accent-chat {
+  border-left: 6px solid var(--caramel);
+}
+
+.chat-panel {
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.chat-log {
+  display: grid;
+  gap: 10px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+
+.bubble {
+  display: grid;
+  gap: 6px;
+  max-width: min(78%, 560px);
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+
+.bubble.adopter {
+  justify-self: end;
+  background: var(--primary-soft);
+}
+
+.bubble.withheld {
+  border: 2px dashed var(--coral);
+}
+
+.bubble.hidden p {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.bubble-head {
+  font-size: 0.85rem;
+}
+
+.bubble button.small {
+  padding: 4px 12px;
+  min-height: 0;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 860px) {
+  .bubble {
+    max-width: 92%;
+  }
+}

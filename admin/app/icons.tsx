@@ -26,6 +26,18 @@ export const icons = {
       <path d="M10 21v-6h4v6" />
     </Icon>
   ),
+  chat: (
+    <Icon>
+      <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.9A8 8 0 1 1 21 12Z" />
+      <path d="M8.5 11h.01M12 11h.01M15.5 11h.01" />
+    </Icon>
+  ),
+  shield: (
+    <Icon>
+      <path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6L12 3Z" />
+      <path d="m9 12 2 2 4-4" />
+    </Icon>
+  ),
   flag: (
     <Icon>
       <path d="M5 21V4" />

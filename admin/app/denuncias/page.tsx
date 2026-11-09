@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import {
   Empty,
@@ -15,7 +16,7 @@ import {
 
 interface Report {
   id: string;
-  targetType: 'post' | 'comment' | 'user' | 'campaign';
+  targetType: 'post' | 'comment' | 'user' | 'campaign' | 'adoption_thread';
   targetId: string;
   reason: string;
   status: string;
@@ -32,12 +33,14 @@ const targetLabel = {
   comment: 'Comentário',
   user: 'Perfil',
   campaign: 'Campanha',
+  adoption_thread: 'Conversa',
 } as const;
 const hideLabel = {
   post: 'Tirar o post do ar',
   comment: 'Esconder o comentário',
   user: 'Suspender a conta',
   campaign: 'Suspender a campanha',
+  adoption_thread: 'Encerrar a conversa',
 } as const;
 
 const tabs = [
@@ -112,6 +115,11 @@ export default function ReportsPage() {
                   {report.targetText ?? <span className="muted">O conteúdo não existe mais.</span>}
                   {report.targetHandle ? <div className="muted">@{report.targetHandle}</div> : null}
                 </blockquote>
+                {report.targetType === 'adoption_thread' ? (
+                  <Link href={`/conversas?id=${report.targetId}`}>
+                    Ler a conversa antes de decidir
+                  </Link>
+                ) : null}
                 {report.status === 'open' ? (
                   <div className="actions">
                     <button
