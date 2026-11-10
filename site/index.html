@@ -25,13 +25,15 @@
     />
     <style>
       /*
-        Layout: faixas de largura total que alternam creme e turquesa profundo;
-        o herói é escuro com o celular mostrando o mapa de patas, e o resto
-        conta a jornada de um animal, do alerta até a adoção.
-        Cores e fontes seguem apps/mobile/src/theme/tokens.ts.
+        Layout: tema escuro. Faixas de largura total em tons de turquesa quase
+        preto; o herói mostra o celular com o mapa de patas, e o resto conta a
+        jornada de um animal, do alerta até a adoção.
+        A paleta da marca segue apps/mobile/src/theme/tokens.ts. As regras usam
+        os tokens de superfície (--fundo, --superficie, --texto...) e não as
+        cores cruas, para o tema ficar num lugar só.
       */
       :root {
-        color-scheme: light;
+        color-scheme: dark;
         --creme: #fff8ee;
         --creme-fundo: #f8eddd;
         --branco: #ffffff;
@@ -54,6 +56,21 @@
         --urgente: #d93b3b;
         --atencao: #e8a33d;
         --espera: #2e9a6a;
+
+        /* Superfícies do tema escuro */
+        --fundo: #0b1b1b;
+        --fundo-alt: #0f2424;
+        --superficie: #132e2e;
+        --superficie-alta: #183737;
+        --borda: rgb(201 232 232 / 0.1);
+        --borda-forte: rgb(201 232 232 / 0.18);
+        --texto-forte: #f4efe6;
+        --texto-suave: #a7bdba;
+        --titulo-cor: #fff8ee;
+        --acento: #6fbbbb;
+        --brilho-turquesa: rgb(31 122 122 / 0.22);
+        --brilho-caramelo: rgb(217 138 61 / 0.16);
+        --sombra: 0 18px 40px -22px rgb(0 0 0 / 0.75);
 
         --titulo: 'Baloo 2', 'Nunito', system-ui, sans-serif;
         --texto: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -84,8 +101,8 @@
       }
       body {
         margin: 0;
-        background: var(--creme);
-        color: var(--tinta);
+        background: var(--fundo);
+        color: var(--texto-forte);
         font-family: var(--texto);
         font-size: var(--t-md);
         line-height: 1.6;
@@ -132,7 +149,7 @@
         font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        color: var(--turquesa);
+        color: var(--acento);
       }
 
       /* ---------- Cabeçalho ---------- */
@@ -142,14 +159,15 @@
         inset: 0 0 auto;
         height: env(safe-area-inset-top, 0px);
         z-index: 30;
-        background: var(--turquesa-900);
+        background: var(--fundo);
       }
       .topo {
         position: sticky;
         top: env(safe-area-inset-top, 0px);
         z-index: 20;
-        background: rgb(10 43 43 / 0.92);
+        background: rgb(8 24 24 / 0.86);
         backdrop-filter: saturate(1.4) blur(12px);
+        border-bottom: 1px solid var(--borda);
         color: var(--creme);
       }
       .topo .contido {
@@ -241,16 +259,16 @@
         box-shadow: inset 0 0 0 2px var(--creme);
       }
       .botao[aria-disabled='true'] {
-        background: var(--caramelo-100);
-        color: var(--tinta-suave);
+        background: var(--superficie-alta);
+        color: var(--texto-suave);
         box-shadow: none;
         pointer-events: none;
       }
 
       /* ---------- Convite de post compartilhado (?post=) ---------- */
       .convite {
-        background: var(--coral-50);
-        border-bottom: 1px solid var(--linha);
+        background: linear-gradient(90deg, rgb(242 107 78 / 0.18), rgb(242 107 78 / 0.06)), var(--fundo-alt);
+        border-bottom: 1px solid var(--borda);
         padding: 20px 0;
       }
       .convite .contido {
@@ -265,13 +283,13 @@
       .convite-texto b {
         display: block;
         font: 800 var(--t-lg) / 1.2 var(--titulo);
-        color: var(--turquesa-800);
+        color: var(--titulo-cor);
       }
       .convite-texto span {
         display: block;
         margin-top: 4px;
         font-size: var(--t-sm);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .convite-acoes {
         display: flex;
@@ -279,11 +297,11 @@
         gap: 10px;
       }
       .botao-turquesa-linha {
-        color: var(--turquesa-800);
-        box-shadow: inset 0 0 0 2px var(--turquesa-300);
+        color: var(--turquesa-100);
+        box-shadow: inset 0 0 0 2px rgb(111 187 187 / 0.5);
       }
       .botao-turquesa-linha:hover {
-        box-shadow: inset 0 0 0 2px var(--turquesa);
+        box-shadow: inset 0 0 0 2px var(--turquesa-300);
       }
       @media (max-width: 520px) {
         .convite-acoes,
@@ -297,9 +315,9 @@
         position: relative;
         overflow: hidden;
         background:
-          radial-gradient(60rem 30rem at 85% 10%, rgb(31 122 122 / 0.55), transparent 60%),
-          radial-gradient(40rem 24rem at 0% 100%, rgb(217 138 61 / 0.18), transparent 70%),
-          var(--turquesa-900);
+          radial-gradient(60rem 30rem at 85% 10%, rgb(31 122 122 / 0.5), transparent 60%),
+          radial-gradient(40rem 24rem at 0% 100%, rgb(217 138 61 / 0.16), transparent 70%),
+          linear-gradient(180deg, var(--turquesa-900), var(--fundo));
         color: var(--creme);
       }
       .heroi .contido {
@@ -403,7 +421,7 @@
         background: var(--branco);
         box-shadow: 0 4px 14px rgb(0 0 0 / 0.12);
         font-size: 0.8rem;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .tela-busca svg {
         width: 15px;
@@ -449,7 +467,7 @@
         align-items: center;
         gap: 8px;
         font-size: 0.72rem;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .chip {
         display: inline-flex;
@@ -482,7 +500,7 @@
         margin-top: 4px;
         font-size: 0.75rem;
         line-height: 1.4;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .folha-botao {
         margin-top: 10px;
@@ -504,7 +522,7 @@
         gap: 6px;
         padding: 4px 10px;
         border-radius: 999px;
-        background: var(--turquesa-900);
+        background: var(--fundo);
         color: var(--creme);
         font-size: 0.68rem;
         font-weight: 800;
@@ -616,8 +634,8 @@
 
       /* ---------- Faixa de compromissos ---------- */
       .compromissos {
-        background: var(--creme);
-        border-bottom: 1px solid var(--linha);
+        background: var(--fundo);
+        border-bottom: 1px solid var(--borda);
       }
       .compromissos ul {
         list-style: none;
@@ -633,11 +651,11 @@
         gap: 12px;
         font-size: var(--t-sm);
         line-height: 1.45;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .compromissos b {
         display: block;
-        color: var(--tinta);
+        color: var(--texto-forte);
         font-size: var(--t-md);
       }
       .icone {
@@ -647,8 +665,8 @@
         border-radius: 12px;
         display: grid;
         place-items: center;
-        background: var(--turquesa-50);
-        color: var(--turquesa);
+        background: var(--brilho-turquesa);
+        color: var(--turquesa-300);
       }
       .icone svg {
         width: 20px;
@@ -657,14 +675,14 @@
 
       /* ---------- Ao vivo: dados reais do app (/ao-vivo.json) ---------- */
       .ao-vivo {
-        background: var(--creme-fundo);
-        border-bottom: 1px solid var(--linha);
+        background: var(--fundo-alt);
+        border-bottom: 1px solid var(--borda);
       }
       .ao-vivo .rotulo {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        color: var(--coral-600);
+        color: var(--coral);
       }
       .ponto-vivo {
         width: 10px;
@@ -695,16 +713,16 @@
       .numeros li {
         padding: 20px 22px;
         border-radius: var(--raio);
-        background: var(--branco);
-        border: 1px solid var(--linha);
+        background: var(--superficie);
+        border: 1px solid var(--borda);
         font-size: var(--t-sm);
         line-height: 1.35;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .numeros b {
         display: block;
         font: 800 2.25rem / 1.1 var(--titulo);
-        color: var(--turquesa-800);
+        color: var(--titulo-cor);
         font-variant-numeric: tabular-nums;
       }
       .ao-vivo-grade {
@@ -717,7 +735,7 @@
       .ao-vivo h3 {
         font-size: 1.3rem;
         font-weight: 700;
-        color: var(--turquesa-800);
+        color: var(--titulo-cor);
       }
       .bloco-vivo + .bloco-vivo {
         margin-top: 32px;
@@ -727,8 +745,8 @@
         margin: 14px 0 0;
         padding: 6px;
         border-radius: var(--raio);
-        background: var(--branco);
-        border: 1px solid var(--linha);
+        background: var(--superficie);
+        border: 1px solid var(--borda);
       }
       .atividade li {
         display: flex;
@@ -738,7 +756,7 @@
         border-radius: 12px;
       }
       .atividade li + li {
-        border-top: 1px solid var(--linha);
+        border-top: 1px solid var(--borda);
         border-radius: 0;
       }
       .atividade .miniatura {
@@ -754,11 +772,11 @@
       }
       .atividade span {
         font-size: var(--t-xs);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .miniatura {
         object-fit: cover;
-        background: var(--caramelo-100);
+        background: var(--superficie-alta);
       }
       .cartoes {
         list-style: none;
@@ -773,8 +791,8 @@
         height: 100%;
         border-radius: var(--raio);
         overflow: hidden;
-        background: var(--branco);
-        border: 1px solid var(--linha);
+        background: var(--superficie);
+        border: 1px solid var(--borda);
         text-decoration: none;
         transition:
           transform 0.15s,
@@ -782,7 +800,8 @@
       }
       .cartoes a:hover {
         transform: translateY(-2px);
-        box-shadow: 0 14px 28px -18px rgb(15 63 63 / 0.6);
+        border-color: var(--borda-forte);
+        box-shadow: var(--sombra);
       }
       .cartoes .miniatura {
         width: 100%;
@@ -801,7 +820,7 @@
         display: block;
         line-height: 1.4;
         font-size: var(--t-xs);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .eventos-vivo {
         list-style: none;
@@ -813,8 +832,8 @@
       .eventos-vivo li {
         padding: 14px 16px;
         border-radius: var(--raio);
-        background: var(--branco);
-        border: 1px solid var(--linha);
+        background: var(--superficie);
+        border: 1px solid var(--borda);
       }
       .eventos-vivo b {
         display: block;
@@ -824,12 +843,12 @@
         display: block;
         line-height: 1.4;
         font-size: var(--t-xs);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .ao-vivo-nota {
         margin-top: 24px;
         font-size: var(--t-xs);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
 
       /* ---------- Seções ---------- */
@@ -843,12 +862,12 @@
         margin-top: 10px;
         font-size: var(--t-xl);
         font-weight: 800;
-        color: var(--turquesa-800);
+        color: var(--titulo-cor);
       }
       .secao-cabeca p {
         margin-top: 14px;
         font-size: var(--t-lg);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
 
       /* Jornada: os status reais de um post, em ordem */
@@ -888,7 +907,7 @@
         font-family: var(--titulo);
         font-weight: 800;
         font-size: 1.25rem;
-        box-shadow: 0 0 0 6px var(--creme);
+        box-shadow: 0 0 0 6px var(--fundo);
       }
       .jornada li:last-child::before {
         background: var(--coral);
@@ -901,7 +920,7 @@
       }
       .jornada p {
         margin-top: 6px;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
         font-size: var(--t-sm);
         max-width: 17rem;
       }
@@ -910,15 +929,15 @@
         margin-top: 12px;
         padding: 2px 10px;
         border-radius: 6px;
-        background: var(--caramelo-100);
-        color: var(--caramelo-700);
+        background: var(--brilho-caramelo);
+        color: #f0b77a;
         font-size: var(--t-xs);
         font-weight: 800;
       }
 
       /* Recursos em blocos alternados */
       .recursos {
-        background: var(--creme-fundo);
+        background: var(--fundo-alt);
       }
       .recurso {
         display: grid;
@@ -936,11 +955,11 @@
         margin-top: 10px;
         font-size: clamp(1.625rem, 2.6vw, 2.125rem);
         font-weight: 800;
-        color: var(--turquesa-800);
+        color: var(--titulo-cor);
       }
       .recurso > div > p {
         margin-top: 14px;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
         max-width: 32rem;
       }
       .lista {
@@ -960,7 +979,7 @@
         width: 22px;
         height: 22px;
         margin-top: 2px;
-        color: var(--turquesa);
+        color: var(--turquesa-300);
       }
       .recurso-arte {
         position: relative;
@@ -968,11 +987,16 @@
         place-items: center;
         min-height: 360px;
         border-radius: var(--raio-lg);
-        background: var(--turquesa-50);
+        background:
+          radial-gradient(26rem 18rem at 50% 40%, rgb(31 122 122 / 0.45), transparent 70%),
+          var(--superficie);
+        border: 1px solid var(--borda);
         overflow: hidden;
       }
       .recurso-arte.quente {
-        background: var(--caramelo-100);
+        background:
+          radial-gradient(26rem 18rem at 50% 40%, rgb(217 138 61 / 0.32), transparent 70%),
+          var(--superficie);
       }
       .recurso-arte img.cupu {
         width: min(300px, 70%);
@@ -986,8 +1010,9 @@
         gap: 8px;
         padding: 14px 16px;
         border-radius: var(--raio);
-        background: var(--branco);
-        box-shadow: 0 10px 30px -12px rgb(15 63 63 / 0.35);
+        background: var(--superficie-alta);
+        border: 1px solid var(--borda);
+        box-shadow: var(--sombra);
         font-size: var(--t-sm);
         font-weight: 700;
       }
@@ -1007,16 +1032,17 @@
         max-width: 220px;
         padding: 12px 14px;
         border-radius: var(--raio);
-        background: var(--branco);
-        box-shadow: 0 10px 30px -12px rgb(15 63 63 / 0.35);
+        background: var(--superficie-alta);
+        border: 1px solid var(--borda);
+        box-shadow: var(--sombra);
         font-size: var(--t-xs);
         line-height: 1.4;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .cartao-flutuante b {
         display: block;
         font-size: var(--t-sm);
-        color: var(--tinta);
+        color: var(--texto-forte);
       }
 
       /* Cupu no canto de uma seção, ao lado do título */
@@ -1047,7 +1073,7 @@
         max-width: 180px;
         margin-inline: auto;
         border-radius: 50%;
-        box-shadow: 0 18px 36px -18px rgb(15 63 63 / 0.55);
+        box-shadow: 0 18px 36px -18px rgb(0 0 0 / 0.8);
         transition: transform 0.25s;
       }
       .selo:hover img {
@@ -1061,12 +1087,14 @@
       .selo p {
         margin-top: 4px;
         font-size: var(--t-sm);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
 
       /* Cuidados: faixa escura */
       .cuidados {
-        background: var(--turquesa-800);
+        background:
+          radial-gradient(50rem 26rem at 100% 0%, rgb(31 122 122 / 0.35), transparent 65%),
+          var(--turquesa-900);
         color: var(--creme);
       }
       .cuidados .secao-cabeca h2 {
@@ -1091,7 +1119,7 @@
         display: flex;
         gap: 16px;
         padding: 28px;
-        background: var(--turquesa-800);
+        background: var(--turquesa-900);
       }
       .regra .icone {
         background: rgb(255 255 255 / 0.08);
@@ -1119,7 +1147,9 @@
         gap: 32px;
         padding: 56px;
         border-radius: var(--raio-lg);
-        background: var(--coral);
+        background:
+          radial-gradient(30rem 20rem at 100% 100%, rgb(255 248 238 / 0.22), transparent 70%),
+          var(--coral);
         color: var(--tinta);
         overflow: hidden;
       }
@@ -1139,7 +1169,7 @@
         box-shadow: none;
       }
       .chamada-caixa .botao:hover {
-        background: var(--tinta);
+        background: var(--fundo);
       }
       .chamada-caixa img {
         width: 220px;
@@ -1149,7 +1179,9 @@
 
       /* ---------- Aba Baixar ---------- */
       .baixar-heroi {
-        background: var(--turquesa-900);
+        background:
+          radial-gradient(50rem 26rem at 90% 0%, rgb(31 122 122 / 0.45), transparent 60%),
+          linear-gradient(180deg, var(--turquesa-900), var(--fundo));
         color: var(--creme);
       }
       .baixar-heroi .contido {
@@ -1231,6 +1263,7 @@
       .qr p {
         font-size: var(--t-sm);
         line-height: 1.4;
+        /* O cartão do QR continua claro para a câmera ler bem */
         color: var(--tinta-suave);
       }
       .qr b {
@@ -1246,7 +1279,7 @@
       .baixar-corpo h2 {
         font-size: 1.75rem;
         font-weight: 800;
-        color: var(--turquesa-800);
+        color: var(--titulo-cor);
       }
       .passos {
         list-style: none;
@@ -1262,7 +1295,7 @@
         grid-template-columns: 40px minmax(0, 1fr);
         gap: 16px;
         padding: 16px 0;
-        border-bottom: 1px solid var(--linha);
+        border-bottom: 1px solid var(--borda);
       }
       .passos li::before {
         content: counter(passo);
@@ -1271,8 +1304,8 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: var(--turquesa-50);
-        color: var(--turquesa);
+        background: var(--brilho-turquesa);
+        color: var(--turquesa-300);
         font-family: var(--titulo);
         font-weight: 800;
       }
@@ -1281,14 +1314,14 @@
       }
       .passos span {
         font-size: var(--t-sm);
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .novidades {
         margin-top: 40px;
         padding: 24px;
         border-radius: var(--raio);
-        background: var(--branco);
-        border: 1px solid var(--linha);
+        background: var(--superficie);
+        border: 1px solid var(--borda);
       }
       .novidades h2 {
         font-size: 1.25rem;
@@ -1296,7 +1329,7 @@
       .novidades ul {
         margin: 12px 0 0;
         padding-left: 20px;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
       }
       .novidades li + li {
         margin-top: 6px;
@@ -1308,8 +1341,8 @@
       }
       details {
         border-radius: var(--raio);
-        background: var(--branco);
-        border: 1px solid var(--linha);
+        background: var(--superficie);
+        border: 1px solid var(--borda);
       }
       summary {
         display: flex;
@@ -1329,7 +1362,7 @@
         flex: none;
         font-size: 1.4rem;
         line-height: 1;
-        color: var(--turquesa);
+        color: var(--turquesa-300);
         transition: transform 0.2s;
       }
       details[open] summary::after {
@@ -1337,14 +1370,15 @@
       }
       details p {
         padding: 0 20px 18px;
-        color: var(--tinta-suave);
+        color: var(--texto-suave);
         font-size: var(--t-sm);
       }
 
       /* ---------- Rodapé ---------- */
       .rodape {
-        background: var(--turquesa-900);
-        color: var(--turquesa-100);
+        background: #071313;
+        border-top: 1px solid var(--borda);
+        color: var(--texto-suave);
         font-size: var(--t-sm);
       }
       .rodape .contido {
@@ -1352,8 +1386,56 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
-        gap: 12px 24px;
-        padding-block: 32px calc(32px + env(safe-area-inset-bottom, 0px));
+        gap: 24px 40px;
+        padding-block: 40px calc(40px + env(safe-area-inset-bottom, 0px));
+      }
+      .rodape-marca p {
+        margin-top: 10px;
+        max-width: 26rem;
+      }
+      .rodape-autor {
+        display: grid;
+        gap: 10px;
+      }
+      .rodape-autor > span {
+        font-size: var(--t-xs);
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--acento);
+      }
+      .rodape-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .rodape-links a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 44px;
+        padding: 0 16px;
+        border-radius: 12px;
+        background: var(--superficie);
+        border: 1px solid var(--borda);
+        color: var(--texto-forte);
+        font-weight: 700;
+        text-decoration: none;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      .rodape-links a:hover {
+        background: var(--superficie-alta);
+        border-color: var(--borda-forte);
+      }
+      .rodape-links svg {
+        width: 18px;
+        height: 18px;
+        color: var(--turquesa-300);
       }
       .rodape .marca {
         font-size: 1.125rem;
@@ -1440,7 +1522,7 @@
         }
       }
       @media (max-width: 600px) {
-        .marca span {
+        .topo .marca span {
           display: none;
         }
         .abas a {
@@ -1605,6 +1687,23 @@
         >
           <circle cx="12" cy="12" r="9.5" />
           <path d="m8 12.5 2.8 2.8L16.5 9" />
+        </symbol>
+        <symbol id="i-linkedin" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M20.4 2H3.6A1.6 1.6 0 0 0 2 3.6v16.8A1.6 1.6 0 0 0 3.6 22h16.8a1.6 1.6 0 0 0 1.6-1.6V3.6A1.6 1.6 0 0 0 20.4 2zM8 19H5V9.5h3zM6.5 8.2a1.7 1.7 0 1 1 0-3.5 1.7 1.7 0 0 1 0 3.5zM19 19h-3v-4.6c0-1.1 0-2.5-1.5-2.5S12.8 13 12.8 14.3V19h-3V9.5h2.8v1.3h.1a3.1 3.1 0 0 1 2.8-1.5c3 0 3.5 2 3.5 4.5z"
+          />
+        </symbol>
+        <symbol
+          id="i-portfolio"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="7" width="18" height="13" rx="2" />
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18" />
         </symbol>
         <symbol id="i-android" viewBox="0 0 24 24" fill="currentColor">
           <path
@@ -2267,11 +2366,31 @@
 
     <footer class="rodape">
       <div class="contido">
-        <a class="marca" href="#sobre">
-          <img src="/img/icone.png" alt="" width="30" height="30" />
-          <span>Égua, adota!</span>
-        </a>
-        <span>Feito em Belém do Pará, com carinho pelos bichos da nossa terra.</span>
+        <div class="rodape-marca">
+          <a class="marca" href="#sobre">
+            <img src="/img/icone.png" alt="" width="30" height="30" />
+            <span>Égua, adota!</span>
+          </a>
+          <p>Feito em Belém do Pará, com carinho pelos bichos da nossa terra.</p>
+        </div>
+        <div class="rodape-autor">
+          <span>Criado por Hiago Machado</span>
+          <ul class="rodape-links">
+            <li>
+              <a href="https://www.linkedin.com/in/hiago-machado25" target="_blank" rel="noopener">
+                <svg aria-hidden="true"><use href="#i-linkedin" /></svg>
+                LinkedIn
+              </a>
+            </li>
+            <li>
+              <!-- Portfólio: troque o href quando o site estiver no ar com o domínio definitivo -->
+              <a href="https://portfolio.86.48.25.233.sslip.io" target="_blank" rel="noopener">
+                <svg aria-hidden="true"><use href="#i-portfolio" /></svg>
+                Portfólio
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </footer>
 
