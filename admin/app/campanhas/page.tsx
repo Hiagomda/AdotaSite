@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { CreateCampaign } from '../criar';
+import { CreateCampaign, bannerColors } from '../criar';
 import { icons } from '../icons';
 import {
   Empty,
@@ -28,10 +28,19 @@ interface Campaign {
   deadline: string;
   ownerHandle: string;
   ownerName: string;
+  ownerVerified?: boolean;
+  ownerIsNgo?: boolean;
+  purpose?: string;
+  pixKey?: string;
+  reviewStatus?: 'pending' | 'published' | 'rejected';
+  reviewNote?: string | null;
+  bannerUrl?: string | null;
+  bannerColor?: string | null;
   createdAt: string;
 }
 
 const filters = [
+  { value: 'pending', label: 'Esperando aprovação' },
   { value: 'reported', label: 'Denunciadas' },
   { value: 'active', label: 'No ar' },
   { value: 'suspended', label: 'Suspensas' },
@@ -59,7 +68,7 @@ function day(value: string): string {
  */
 export default function CampaignsPage() {
   const me = useStaff();
-  const [filter, setFilter] = useState<(typeof filters)[number]['value']>('reported');
+  const [filter, setFilter] = useState<(typeof filters)[number]['value']>('pending');
   const allowed = Boolean(me?.permissions.includes('campaigns.review'));
   const { data, message, reload } = useModeration<{ campaigns: Campaign[] }>(
     allowed ? `campaigns?filter=${filter}` : null,
@@ -81,6 +90,24 @@ export default function CampaignsPage() {
     reload();
   }
 
+  async function review(campaign: Campaign, action: 'approve' | 'reject', reason?: string) {
+    setBusy(campaign.id);
+    setError('');
+    const failure = await moderate(`campaigns/${campaign.id}/review`, {
+      action,
+      ...(reason ? { reason } : {}),
+    });
+    setBusy(null);
+    if (failure) setError(failure);
+    reload();
+  }
+
+  function reject(campaign: Campaign, form: FormEvent<HTMLFormElement>) {
+    form.preventDefault();
+    const reason = String(new FormData(form.currentTarget).get('reason') ?? '').trim();
+    void review(campaign, 'reject', reason);
+  }
+
   return (
     <Guard me={me} permission="campaigns.review" label="as campanhas">
       {(staff) => (
@@ -88,7 +115,7 @@ export default function CampaignsPage() {
           <>
             <PageHeader
               title="Campanhas"
-              subtitle="Arrecadações abertas no app. O valor arrecadado só soma o que o responsável confirmou com comprovante. Suspender tira o Pix do ar e avisa o responsável."
+              subtitle="Toda campanha pedida pelo app (ONG, protetor ou outra pessoa) espera aqui até você aprovar; só então ela aparece com o Pix. O valor arrecadado só soma o que o responsável confirmou com comprovante. Suspender tira o Pix do ar e avisa o responsável."
             />
             <CreateCampaign onCreated={reload} />
             <div className="tabs">
@@ -109,6 +136,9 @@ export default function CampaignsPage() {
             {data && data.campaigns.length === 0 ? <Empty>Nenhuma campanha aqui.</Empty> : null}
             {(data?.campaigns ?? []).map((campaign) => {
               const suspended = campaign.status === 'suspended';
+              const waiting = campaign.reviewStatus === 'pending';
+              const refused = campaign.reviewStatus === 'rejected';
+              const color = bannerColors.find((item) => item.value === campaign.bannerColor);
               const percent =
                 campaign.goalCents > 0
                   ? Math.min(100, Math.round((campaign.raisedCents / campaign.goalCents) * 100))
@@ -118,11 +148,23 @@ export default function CampaignsPage() {
                   <div className="thumb">{icons.coin}</div>
                   <div className="stack">
                     <div className="row">
-                      <span
-                        className={`badge${suspended ? ' warn' : campaign.status === 'active' ? ' ok' : ''}`}
-                      >
-                        {statusLabel[campaign.status] ?? campaign.status}
-                      </span>
+                      {waiting ? (
+                        <span className="badge gold">Esperando aprovação</span>
+                      ) : refused ? (
+                        <span className="badge warn">Recusada</span>
+                      ) : (
+                        <span
+                          className={`badge${suspended ? ' warn' : campaign.status === 'active' ? ' ok' : ''}`}
+                        >
+                          {statusLabel[campaign.status] ?? campaign.status}
+                        </span>
+                      )}
+                      {campaign.ownerIsNgo ? <span className="badge">ONG</span> : null}
+                      {campaign.ownerVerified ? (
+                        <span className="badge ok">Verificado</span>
+                      ) : (
+                        <span className="badge">Sem selo de verificado</span>
+                      )}
                       {campaign.openReports > 0 ? (
                         <span className="badge warn">
                           {campaign.openReports}{' '}
@@ -145,13 +187,63 @@ export default function CampaignsPage() {
                       {campaign.ownerName} @{campaign.ownerHandle} · criada em{' '}
                       {formatDate(campaign.createdAt)}
                     </p>
+                    {waiting || refused ? (
+                      <>
+                        {campaign.purpose ? <p>{campaign.purpose}</p> : null}
+                        {campaign.pixKey ? (
+                          <p className="pix-line">Pix: {campaign.pixKey}</p>
+                        ) : null}
+                        <div className="row">
+                          {campaign.bannerUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              className="campaign-banner-thumb"
+                              src={campaign.bannerUrl}
+                              alt="Foto do banner"
+                            />
+                          ) : null}
+                          <span className="muted">
+                            Banner: {color?.label ?? 'Coral'}
+                            {campaign.bannerUrl ? ' com foto' : ', sem foto'}
+                          </span>
+                        </div>
+                        {refused && campaign.reviewNote ? (
+                          <p className="muted">Motivo da recusa: {campaign.reviewNote}</p>
+                        ) : null}
+                      </>
+                    ) : null}
+                    {waiting ? (
+                      <div className="stack">
+                        <div className="actions">
+                          <button
+                            type="button"
+                            disabled={busy === campaign.id}
+                            onClick={() => void review(campaign, 'approve')}
+                          >
+                            Aprovar e pôr no ar
+                          </button>
+                        </div>
+                        <form className="actions" onSubmit={(form) => reject(campaign, form)}>
+                          <input
+                            name="reason"
+                            required
+                            minLength={5}
+                            maxLength={500}
+                            placeholder="Motivo da recusa (vai para quem pediu)"
+                          />
+                          <button type="submit" className="danger" disabled={busy === campaign.id}>
+                            Recusar
+                          </button>
+                        </form>
+                      </div>
+                    ) : null}
                     {campaign.openReports > 0 ? (
                       <p className="muted">
                         As denúncias desta campanha ficam em Denúncias, onde dá para aceitar ou
                         arquivar.
                       </p>
                     ) : null}
-                    {campaign.status === 'active' || suspended ? (
+                    {!waiting && !refused && (campaign.status === 'active' || suspended) ? (
                       <form className="actions" onSubmit={(form) => void toggle(campaign, form)}>
                         <input
                           name="justification"

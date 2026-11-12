@@ -14,6 +14,7 @@ const sections = new Set([
   'feed-points',
   'bug-reports',
   'chats',
+  'uploads',
 ]);
 const actions = new Set([
   'review',
