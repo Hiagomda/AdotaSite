@@ -13,6 +13,7 @@ const sections = new Set([
   'partners',
   'feed-points',
   'chats',
+  'uploads',
 ]);
 const actions = new Set([
   'review',

@@ -964,3 +964,88 @@ th {
     max-width: 92%;
   }
 }
+
+/* Banner de destaque da campanha: cor e foto, com prévia. */
+.banner-fields {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  margin: 0;
+}
+
+.banner-fields legend {
+  font-weight: 700;
+  padding: 0 4px;
+}
+
+.banner-preview {
+  height: 96px;
+  border-radius: 12px;
+  padding: 10px;
+  background-size: cover;
+  background-position: center;
+}
+
+.banner-preview span {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 30%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.swatch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.swatch input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.swatch span {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+}
+
+.swatch input:checked + span {
+  border-color: var(--ink);
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4px var(--ink);
+}
+
+.swatch input:focus-visible + span {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.campaign-banner-thumb {
+  width: 120px;
+  height: 68px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.pix-line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--surface-2);
+  border-radius: 8px;
+  padding: 6px 10px;
+  word-break: break-all;
+}

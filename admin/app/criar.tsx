@@ -34,6 +34,118 @@ export function parseMoney(value: string): number | null {
   return Number.isFinite(amount) ? Math.round(amount * 100) : null;
 }
 
+/** Cores do banner de destaques, as mesmas capas do app. */
+export const bannerColors = [
+  { value: 'coral', label: 'Coral', swatch: '#F26B4E' },
+  { value: 'turquoise', label: 'Turquesa', swatch: '#1F7A7A' },
+  { value: 'caramel', label: 'Caramelo', swatch: '#D98A3D' },
+  { value: 'green', label: 'Verde', swatch: '#1E7B52' },
+  { value: 'blue', label: 'Azul', swatch: '#2A64AE' },
+] as const;
+
+/** Reduz a foto no navegador (até 1600 px, JPEG) e manda para a API guardar. */
+async function uploadBanner(file: File): Promise<{ key: string; url: string }> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  const context = canvas.getContext('2d');
+  if (!context) throw new Error('Este navegador não consegue preparar a foto.');
+  context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  const data = canvas.toDataURL('image/jpeg', 0.85).split(',')[1] ?? '';
+  const response = await fetch('/api/mod/uploads', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ data }),
+  });
+  const payload = (await response.json()) as { key?: string; url?: string; message?: string };
+  if (!response.ok || !payload.key || !payload.url) {
+    throw new Error(payload.message ?? 'Não consegui enviar a foto.');
+  }
+  return { key: payload.key, url: payload.url };
+}
+
+/** Escolha da cor e da foto do banner de destaques do app, com prévia. */
+function BannerFields({
+  color,
+  onColor,
+  banner,
+  onBanner,
+  onError,
+}: {
+  color: string;
+  onColor: (value: string) => void;
+  banner: { key: string; url: string } | null;
+  onBanner: (value: { key: string; url: string } | null) => void;
+  onError: (message: string) => void;
+}) {
+  const [sending, setSending] = useState(false);
+  const swatch = bannerColors.find((item) => item.value === color)?.swatch ?? '#F26B4E';
+  return (
+    <fieldset className="stack banner-fields">
+      <legend>Banner de destaque no app</legend>
+      <div
+        className="banner-preview"
+        style={{
+          backgroundColor: swatch,
+          backgroundImage: banner
+            ? `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url(${banner.url})`
+            : undefined,
+        }}
+      >
+        <span>CAMPANHA</span>
+      </div>
+      <div className="swatches" role="radiogroup" aria-label="Cor do banner">
+        {bannerColors.map((item) => (
+          <label key={item.value} className="swatch">
+            <input
+              type="radio"
+              name="bannerColor"
+              value={item.value}
+              checked={color === item.value}
+              onChange={() => onColor(item.value)}
+            />
+            <span style={{ backgroundColor: item.swatch }} aria-hidden="true" />
+            {item.label}
+          </label>
+        ))}
+      </div>
+      <label>
+        Foto do banner (opcional)
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          disabled={sending}
+          onChange={(event) => {
+            const file = event.currentTarget.files?.[0];
+            if (!file) return;
+            setSending(true);
+            uploadBanner(file)
+              .then(onBanner)
+              .catch((failure: unknown) =>
+                onError(failure instanceof Error ? failure.message : 'Não consegui enviar a foto.'),
+              )
+              .finally(() => setSending(false));
+          }}
+        />
+        <span className="muted hint">
+          {sending
+            ? 'Enviando a foto...'
+            : 'Sem foto, o banner usa a cor escolhida. A foto fica com um véu escuro para o texto aparecer.'}
+        </span>
+      </label>
+      {banner ? (
+        <div className="actions">
+          <button type="button" className="quiet" onClick={() => onBanner(null)}>
+            Tirar a foto
+          </button>
+        </div>
+      ) : null}
+    </fieldset>
+  );
+}
+
 function key(): string {
   return `painel-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
@@ -189,6 +301,8 @@ export function CreateCampaign({ onCreated }: { onCreated: () => void }) {
   const [error, setError] = useState('');
   const [done, setDone] = useState('');
   const [clientKey, setClientKey] = useState(key);
+  const [bannerColor, setBannerColor] = useState('coral');
+  const [banner, setBanner] = useState<{ key: string; url: string } | null>(null);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -208,6 +322,8 @@ export function CreateCampaign({ onCreated }: { onCreated: () => void }) {
       goalCents,
       deadline: text(form, 'deadline'),
       pixKey: text(form, 'pixKey'),
+      bannerColor,
+      ...(banner ? { bannerKey: banner.key } : {}),
       ...(ownerHandle ? { ownerHandle } : {}),
       clientKey,
     };
@@ -220,6 +336,8 @@ export function CreateCampaign({ onCreated }: { onCreated: () => void }) {
     }
     element.reset();
     setClientKey(key());
+    setBanner(null);
+    setBannerColor('coral');
     setDone(`A campanha "${payload.title}" está no ar.`);
     onCreated();
   }
@@ -246,7 +364,7 @@ export function CreateCampaign({ onCreated }: { onCreated: () => void }) {
       </label>
       <label>
         Para que é o dinheiro
-        <textarea name="purpose" required minLength={30} maxLength={2000} rows={4} />
+        <textarea name="purpose" required maxLength={2000} rows={4} />
       </label>
       <div className="form-row">
         <label>
@@ -261,7 +379,17 @@ export function CreateCampaign({ onCreated }: { onCreated: () => void }) {
       <label>
         Chave Pix
         <input name="pixKey" required minLength={3} maxLength={120} />
+        <span className="muted hint">
+          Aparece na campanha com botão de copiar e com o QR code do Pix.
+        </span>
       </label>
+      <BannerFields
+        color={bannerColor}
+        onColor={setBannerColor}
+        banner={banner}
+        onBanner={setBanner}
+        onError={setError}
+      />
     </CreatePanel>
   );
 }
