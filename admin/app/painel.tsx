@@ -106,6 +106,12 @@ const sections: {
     icon: icons.bowl,
     permission: 'posts.moderate',
   },
+  {
+    href: '/bugs',
+    label: 'Bugs do app',
+    icon: icons.bug,
+    permission: 'posts.moderate',
+  },
   { href: '/pessoas', label: 'Pessoas', icon: icons.people, permission: 'users.read' },
   { href: '/equipe', label: 'Equipe', icon: icons.team, permission: 'team.read' },
   { href: '/auditoria', label: 'Auditoria', icon: icons.audit, permission: 'audit.read' },
