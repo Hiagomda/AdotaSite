@@ -1048,6 +1048,8 @@ th {
   border-radius: 8px;
   padding: 6px 10px;
   word-break: break-all;
+}
+
 /* Mapa para marcar o local do evento (mapa-local.tsx). */
 .place-picker {
   display: grid;
