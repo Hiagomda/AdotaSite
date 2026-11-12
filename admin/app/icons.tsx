@@ -116,6 +116,13 @@ export const icons = {
       <path d="M10 20v-5h4v5" />
     </Icon>
   ),
+  bowl: (
+    <Icon>
+      <path d="M3 11h18a9 6 0 0 1-18 0Z" />
+      <path d="M8 20h8" />
+      <path d="M9 8c0-1 1-2 1-3M14 8c0-1 1-2 1-3" />
+    </Icon>
+  ),
   clock: (
     <Icon>
       <circle cx="12" cy="12" r="9" />
