@@ -1,8 +1,11 @@
 {
   "version": "0.1.0",
-  "androidVersionCode": 30,
+  "androidVersionCode": 41,
   "notes": [
-    "Marcador novo no mapa: gota na cor da urgência com a patinha dentro.",
-    "A ponta do marcador mostra o lugar exato do animal."
-  ]
+    "Se o seu aplicativo é de antes de 10/11, desinstale e instale este (assinatura nova). Sua conta e seus posts continuam salvos.",
+    "Banner em destaque no Início com as campanhas de arrecadação e os eventos e mutirões que vêm por aí.",
+    "Toque no destaque para ajudar uma campanha ou se inscrever no evento.",
+    "Correção das cores das capas no app do iPhone."
+  ],
+  "reinstall": true
 }
