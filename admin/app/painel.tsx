@@ -100,6 +100,12 @@ const sections: {
   { href: '/eventos', label: 'Eventos', icon: icons.calendar, permission: 'posts.moderate' },
   { href: '/campanhas', label: 'Campanhas', icon: icons.coin, permission: 'campaigns.review' },
   { href: '/parceiros', label: 'Parceiros', icon: icons.shop, permission: 'posts.moderate' },
+  {
+    href: '/pontos',
+    label: 'Ração e água',
+    icon: icons.bowl,
+    permission: 'posts.moderate',
+  },
   { href: '/pessoas', label: 'Pessoas', icon: icons.people, permission: 'users.read' },
   { href: '/equipe', label: 'Equipe', icon: icons.team, permission: 'team.read' },
   { href: '/auditoria', label: 'Auditoria', icon: icons.audit, permission: 'audit.read' },
