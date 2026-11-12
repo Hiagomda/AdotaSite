@@ -6,12 +6,12 @@
     <title>Égua, adota! · App de resgate e adoção em Belém</title>
     <meta
       name="description"
-      content="Viu um bichinho na rua? Avisa no mapa, oferece lar temporário ou adota. O app de Belém que junta vizinhos, protetores e ONGs. Grátis para Android."
+      content="Viu um bichinho na rua? Avisa no mapa, oferece lar temporário ou adota. O app de Belém que junta vizinhos, protetores e ONGs. Grátis para Android e iPhone."
     />
     <meta property="og:title" content="Égua, adota!" />
     <meta
       property="og:description"
-      content="Resgate, lar temporário e adoção para os animais de rua de Belém. Grátis para Android."
+      content="Resgate, lar temporário e adoção para os animais de rua de Belém. Grátis para Android e iPhone."
     />
     <meta property="og:image" content="/img/cupu-oi.webp" />
     <meta property="og:locale" content="pt_BR" />
@@ -1227,9 +1227,14 @@
         align-items: center;
         gap: 14px 18px;
       }
-      #aviso {
+      #aviso,
+      #aviso-iphone {
         font-size: var(--t-sm);
         color: var(--turquesa-300);
+      }
+      #aviso-iphone a {
+        color: inherit;
+        font-weight: 700;
       }
       .baixar-lado {
         justify-self: end;
@@ -1747,7 +1752,7 @@
         <section class="heroi">
           <div class="contido">
             <div class="heroi-texto">
-              <span class="rotulo">Belém do Pará · Grátis para Android</span>
+              <span class="rotulo">Belém do Pará · Grátis para Android e iPhone</span>
               <h1>Viu um bichinho na rua? <em>Belém inteira</em> ajuda.</h1>
               <p class="heroi-sub">
                 Marca no mapa com foto, acha um lar temporário e encontra quem quer adotar. O Égua,
@@ -2263,6 +2268,10 @@
                   <span id="botao-texto">Preparando o arquivo…</span>
                 </a>
                 <span id="aviso">Se o botão não liberar, atualiza a página daqui a pouco.</span>
+                <span id="aviso-iphone"
+                  >Tem iPhone? <a href="https://app.eguaadota.com.br/app/">Usa a versão para iPhone</a
+                  >.</span
+                >
               </div>
             </div>
             <div class="baixar-lado">
@@ -2327,7 +2336,12 @@
               </details>
               <details>
                 <summary>Tem para iPhone?</summary>
-                <p>Ainda não. Por enquanto o app é só para Android.</p>
+                <p>
+                  Tem, sim. Abre
+                  <a href="https://app.eguaadota.com.br/app/">app.eguaadota.com.br/app</a> no Safari,
+                  toca em Compartilhar e depois em “Adicionar à Tela de Início”. Ele fica na tela
+                  como um app.
+                </p>
               </details>
               <details>
                 <summary>Como atualizo o app?</summary>
