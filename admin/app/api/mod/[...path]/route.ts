@@ -12,6 +12,7 @@ const sections = new Set([
   'campaigns',
   'partners',
   'feed-points',
+  'bug-reports',
   'chats',
 ]);
 const actions = new Set([

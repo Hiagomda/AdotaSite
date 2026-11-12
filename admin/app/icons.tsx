@@ -123,6 +123,13 @@ export const icons = {
       <path d="M9 8c0-1 1-2 1-3M14 8c0-1 1-2 1-3" />
     </Icon>
   ),
+  bug: (
+    <Icon>
+      <ellipse cx="12" cy="14" rx="6" ry="7" />
+      <path d="M12 7v14M9 5l-1.5-2M15 5l1.5-2M6 11H3M6 16l-2.5 1.5M18 11h3M18 16l2.5 1.5" />
+      <path d="M9 7.5a3 3 0 0 1 6 0" />
+    </Icon>
+  ),
   clock: (
     <Icon>
       <circle cx="12" cy="12" r="9" />
