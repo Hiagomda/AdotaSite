@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, type FormEvent, type ReactNode } from 'react';
+import { EventPlacePicker, type PlacePoint } from './mapa-local';
 import { moderate } from './painel';
 
 const categories = [
@@ -13,16 +14,6 @@ const categories = [
 
 function text(form: FormData, name: string): string {
   return String(form.get(name) ?? '').trim();
-}
-
-/** "-1.4569, -48.4889" ou o link do Google Maps com @lat,lng. */
-export function parsePoint(value: string): { latitude: number; longitude: number } | null {
-  const match = /(-?\d{1,2}(?:\.\d+)?)\s*,\s*(-?\d{1,3}(?:\.\d+)?)/.exec(value);
-  if (!match) return null;
-  const latitude = Number(match[1]);
-  const longitude = Number(match[2]);
-  if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
-  return { latitude, longitude };
 }
 
 /** "1.500,50" ou "1500.50" em centavos. */
@@ -195,6 +186,11 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
   const [error, setError] = useState('');
   const [done, setDone] = useState('');
   const [clientKey, setClientKey] = useState(key);
+  const [category, setCategory] = useState<string>('adoption_fair');
+  const [point, setPoint] = useState<PlacePoint | null>(null);
+  const [placeLabel, setPlaceLabel] = useState('');
+  // O nome achado no mapa só entra se a pessoa ainda não escreveu o próprio.
+  const [labelFromMap, setLabelFromMap] = useState(true);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -202,9 +198,8 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
     const form = new FormData(element);
     setError('');
     setDone('');
-    const point = parsePoint(text(form, 'point'));
     if (!point) {
-      setError('Cole as coordenadas do local, por exemplo -1.4569, -48.4889.');
+      setError('Marque no mapa o lugar do evento.');
       return;
     }
     const day = text(form, 'day');
@@ -214,7 +209,7 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
       title: text(form, 'title'),
       category: text(form, 'category'),
       ...(description ? { description } : {}),
-      placeLabel: text(form, 'placeLabel'),
+      placeLabel: placeLabel.trim(),
       latitude: point.latitude,
       longitude: point.longitude,
       startsAt: `${day}T${text(form, 'start')}:00-03:00`,
@@ -231,6 +226,10 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
     }
     element.reset();
     setClientKey(key());
+    setCategory('adoption_fair');
+    setPoint(null);
+    setPlaceLabel('');
+    setLabelFromMap(true);
     setDone(`"${payload.title}" foi publicado na agenda.`);
     onCreated();
   }
@@ -249,7 +248,11 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
       </label>
       <label>
         Tipo
-        <select name="category" defaultValue="adoption_fair">
+        <select
+          name="category"
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
+        >
           {categories.map((item) => (
             <option key={item.value} value={item.value}>
               {item.label}
@@ -261,15 +264,29 @@ export function CreateEvent({ onCreated }: { onCreated: () => void }) {
         Descrição (opcional)
         <textarea name="description" maxLength={500} rows={3} />
       </label>
+      <EventPlacePicker
+        category={category}
+        value={point}
+        onChange={setPoint}
+        onSuggestLabel={(label) => {
+          if (labelFromMap) setPlaceLabel(label.slice(0, 160));
+        }}
+      />
       <label>
-        Local
-        <input name="placeLabel" required maxLength={160} placeholder="Praça Batista Campos" />
-      </label>
-      <label>
-        Coordenadas do local
-        <input name="point" required placeholder="-1.4569, -48.4889" />
+        Nome do local
+        <input
+          name="placeLabel"
+          required
+          maxLength={160}
+          placeholder="Praça Batista Campos"
+          value={placeLabel}
+          onChange={(event) => {
+            setPlaceLabel(event.target.value);
+            setLabelFromMap(event.target.value.trim() === '');
+          }}
+        />
         <span className="muted hint">
-          No Google Maps, toque e segure no lugar e copie os números que aparecem.
+          Vem do mapa. Ajuste para como as pessoas conhecem o lugar.
         </span>
       </label>
       <div className="form-row">

@@ -1048,4 +1048,46 @@ th {
   border-radius: 8px;
   padding: 6px 10px;
   word-break: break-all;
+/* Mapa para marcar o local do evento (mapa-local.tsx). */
+.place-picker {
+  display: grid;
+  gap: 8px;
+}
+
+.place-picker-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.place-search {
+  display: flex;
+  gap: 8px;
+}
+
+.place-search input {
+  flex: 1;
+}
+
+.place-results {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place-results button {
+  width: 100%;
+  text-align: left;
+  font-weight: 400;
+  background: var(--surface-2);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.place-map {
+  height: 340px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
 }

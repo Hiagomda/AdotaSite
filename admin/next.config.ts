@@ -25,8 +25,12 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               scriptSrc,
               "style-src 'self' 'unsafe-inline'",
-              `img-src 'self' data: ${mediaOrigin}`,
-              "connect-src 'self'",
+              `img-src 'self' data: blob: ${mediaOrigin}`,
+              // Mapa da criação de evento: estilo e tiles do OpenFreeMap, busca de endereço no
+              // Nominatim e os workers do MapLibre, que nascem de um blob.
+              "connect-src 'self' https://tiles.openfreemap.org https://nominatim.openstreetmap.org",
+              "worker-src 'self' blob:",
+              "child-src 'self' blob:",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
