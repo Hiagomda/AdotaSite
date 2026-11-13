@@ -87,6 +87,7 @@ export default function PartnersPage() {
               title="Parceiros do Cupu"
               subtitle="Petshops, clínicas e lojas que pediram para aparecer no mapa. O cadastro é de graça em troca de uma vantagem para quem adota ou resgata."
             />
+            <InviteSwitch />
             <div className="tabs">
               {filters.map((item) => (
                 <button
@@ -235,5 +236,58 @@ export default function PartnersPage() {
         </Frame>
       )}
     </Guard>
+  );
+}
+
+/**
+ * Liga e desliga o "Anuncie aqui" no app (convite no mapa, item no painel de camadas e em
+ * Configurações). Começa desligado. Os parceiros já aprovados continuam no mapa de qualquer jeito.
+ */
+function InviteSwitch() {
+  const { data, message, reload } = useModeration<{ switches: { partnerInvite: boolean } }>(
+    'switches',
+  );
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const on = data?.switches.partnerInvite ?? false;
+
+  async function toggle() {
+    setBusy(true);
+    setError('');
+    const failure = await moderate('switches', { name: 'partnerInvite', enabled: !on });
+    setBusy(false);
+    if (failure) setError(failure);
+    reload();
+  }
+
+  return (
+    <article className="card item">
+      <div className="thumb">{icons.shop}</div>
+      <div className="stack">
+        <div className="row">
+          <strong>&quot;Anuncie aqui&quot; no app</strong>
+          {data ? (
+            <span className={on ? 'badge ok' : 'badge'}>{on ? 'Ligado' : 'Desligado'}</span>
+          ) : null}
+        </div>
+        <p className="muted">
+          Quando ligado, o app mostra o convite para petshops e clínicas virarem parceiros (no mapa
+          e em Configurações). Desligado, ninguém vê o convite; os parceiros aprovados continuam no
+          mapa.
+        </p>
+        {message ? <p className="error">{message}</p> : null}
+        {error ? <p className="error">{error}</p> : null}
+        <div className="row">
+          <button
+            type="button"
+            className={on ? 'quiet' : undefined}
+            disabled={!data || busy}
+            onClick={() => void toggle()}
+          >
+            {busy ? 'Salvando...' : on ? 'Desligar' : 'Ligar'}
+          </button>
+        </div>
+      </div>
+    </article>
   );
 }
