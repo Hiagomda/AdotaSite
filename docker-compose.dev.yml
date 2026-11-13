@@ -1,0 +1,31 @@
+# Ambiente de TESTE (homologação). Sobe a partir do branch `develop`, num recurso separado do Coolify,
+# e conversa com a API de teste (api.dev.eguaadota.com.br), que tem banco e fotos próprios.
+# A produção continua em docker-compose.yml, a partir do `main`.
+services:
+  site:
+    build:
+      context: ./site
+      args:
+        API_HOST: api.dev.eguaadota.com.br
+        FOTOS_HOST: img.dev.eguaadota.com.br
+    environment:
+      SERVICE_URL_SITE_80: https://dev.eguaadota.com.br
+    volumes:
+      - apk:/apk
+    restart: unless-stopped
+    mem_limit: 64m
+
+  admin:
+    build:
+      context: ./admin
+      args:
+        ADMIN_MEDIA_ORIGIN: https://img.dev.eguaadota.com.br
+    environment:
+      SERVICE_URL_ADMIN_3020: https://admin.dev.eguaadota.com.br
+      NODE_ENV: production
+      ADMIN_API_URL: https://api.dev.eguaadota.com.br
+    restart: unless-stopped
+    mem_limit: 256m
+
+volumes:
+  apk:
