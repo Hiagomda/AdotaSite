@@ -2761,7 +2761,7 @@
         .then((dados) => {
           if (!dados) return;
           for (const el of document.querySelectorAll('.js-versao')) {
-            el.textContent = `Android · versão ${dados.version} (build ${dados.androidVersionCode})`;
+            el.textContent = `Android · versão ${dados.version}`;
           }
         })
         .catch((erro) => {
