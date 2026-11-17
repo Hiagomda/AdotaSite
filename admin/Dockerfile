@@ -13,11 +13,12 @@ RUN pnpm build && pnpm prune --prod
 
 FROM node:22-bookworm-slim
 WORKDIR /app
-RUN corepack enable
 ENV NODE_ENV=production
 COPY --from=build /app /app
 EXPOSE 3020
 HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=5 \
   CMD node -e "fetch('http://127.0.0.1:3020/').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))"
 # ADMIN_API_URL aponta para a API do app (ex.: http://api-....sslip.io ou http://api:3010).
-CMD ["pnpm", "start"]
+# Chama o Next direto. Com `pnpm start` o Corepack baixava o pnpm do npm a cada subida do
+# container: com o registry fora do ar (ou a rede da VPS ruim) o painel não voltava.
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "3020"]
