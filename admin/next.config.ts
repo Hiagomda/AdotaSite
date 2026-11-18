@@ -10,12 +10,16 @@ const mediaOrigin = process.env.ADMIN_MEDIA_ORIGIN ?? 'http://localhost:8080';
 
 const nextConfig: NextConfig = {
   agentRules: false,
+  // Sem o cabeçalho "X-Powered-By: Next.js", que só ajuda quem procura falha da versão.
+  poweredByHeader: false,
   async headers() {
     return [
       {
         source: '/:path*',
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
+          // O painel só existe em HTTPS (Traefik do Coolify); 180 dias, igual à API.
+          { key: 'Strict-Transport-Security', value: 'max-age=15552000' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'no-referrer' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },

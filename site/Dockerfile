@@ -3,7 +3,7 @@ FROM nginx:1.27-alpine
 ARG APK_URL=https://github.com/Hiagomda/adota/releases/download/apk-0.1.0-48/egua-adota.apk
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker/security-headers.conf /etc/nginx/snippets/security-headers.conf
-COPY index.html 404.html google.html version.json favicon.ico /usr/share/nginx/html/
+COPY index.html 404.html google.html version.json favicon.ico robots.txt sitemap.xml /usr/share/nginx/html/
 COPY img /usr/share/nginx/html/img
 COPY js /usr/share/nginx/html/js
 COPY version.json /opt/version.json

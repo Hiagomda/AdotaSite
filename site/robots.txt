@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /ao-vivo.json
+Disallow: /fotos/
+
+Sitemap: https://eguaadota.com.br/sitemap.xml

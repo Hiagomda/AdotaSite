@@ -1,5 +1,7 @@
 import {
+  badBody,
   clearSessionCookies,
+  readBody,
   readJson,
   rejectCrossOrigin,
   sessionCookie,
@@ -9,7 +11,8 @@ import {
 export async function POST(request: Request) {
   const rejected = rejectCrossOrigin(request);
   if (rejected) return rejected;
-  const body = (await request.json()) as { username?: string; password?: string };
+  const body = (await readBody(request)) as { username?: unknown; password?: unknown } | null;
+  if (!body) return badBody();
   const upstreamResponse = await upstream('/admin/v1/login', request, {
     method: 'POST',
     body: JSON.stringify({ username: body.username, password: body.password }),

@@ -1,9 +1,17 @@
-import { clearSessionCookies, readJson, rejectCrossOrigin, upstream } from '../../../../lib/bff';
+import {
+  badBody,
+  clearSessionCookies,
+  readBody,
+  readJson,
+  rejectCrossOrigin,
+  upstream,
+} from '../../../../lib/bff';
 
 export async function POST(request: Request) {
   const rejected = rejectCrossOrigin(request);
   if (rejected) return rejected;
-  const body = await request.json();
+  const body = await readBody(request);
+  if (body === null) return badBody();
   const upstreamResponse = await upstream('/admin/v1/sessions/revoke', request, {
     method: 'POST',
     body: JSON.stringify(body),

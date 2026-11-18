@@ -16,10 +16,32 @@ export function clientIp(request: Request): string | null {
 export function rejectCrossOrigin(request: Request): Response | null {
   const origin = request.headers.get('origin');
   const host = request.headers.get('host');
-  if (!origin || !host || new URL(origin).host !== host) {
+  if (!origin || !host || originHost(origin) !== host) {
     return Response.json({ message: 'Não consegui confirmar esta ação.' }, { status: 403 });
   }
   return null;
+}
+
+/** Host do cabeçalho Origin; `null` (página local, iframe isolado) ou lixo não valem. */
+function originHost(origin: string): string | null {
+  try {
+    return new URL(origin).host;
+  } catch {
+    return null;
+  }
+}
+
+/** Corpo JSON do navegador; corpo vazio ou quebrado vira null para a rota responder 400. */
+export async function readBody(request: Request): Promise<unknown> {
+  try {
+    return await request.json();
+  } catch {
+    return null;
+  }
+}
+
+export function badBody(): Response {
+  return Response.json({ message: 'O pedido chegou incompleto. Tente de novo.' }, { status: 400 });
 }
 
 export function readCookie(header: string | null, name: string): string | null {
@@ -69,8 +91,16 @@ export function clearSessionCookies(): string[] {
   ];
 }
 
+/**
+ * Corpo da resposta da API. Quando o proxy responde uma página HTML (API reiniciando, 502 do
+ * Traefik), devolve uma mensagem em vez de derrubar a rota do painel com erro 500.
+ */
 export async function readJson(
   response: Response,
 ): Promise<{ message?: string } & Record<string, unknown>> {
-  return (await response.json()) as { message?: string } & Record<string, unknown>;
+  try {
+    return (await response.json()) as { message?: string } & Record<string, unknown>;
+  } catch {
+    return { message: 'A API não respondeu direito. Tente de novo em instantes.' };
+  }
 }

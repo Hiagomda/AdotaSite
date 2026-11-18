@@ -1,4 +1,4 @@
-import { readJson, rejectCrossOrigin, upstream } from '../../../../lib/bff';
+import { badBody, readBody, readJson, rejectCrossOrigin, upstream } from '../../../../lib/bff';
 
 type Context = { params: Promise<{ path: string[] }> };
 
@@ -55,7 +55,8 @@ export async function POST(request: Request, context: Context) {
   if (rejected) return rejected;
   const path = upstreamPath((await context.params).path);
   if (!path) return notFound();
-  const body = await request.json();
+  const body = await readBody(request);
+  if (body === null) return badBody();
   const upstreamResponse = await upstream(path, request, {
     method: 'POST',
     body: JSON.stringify(body),
