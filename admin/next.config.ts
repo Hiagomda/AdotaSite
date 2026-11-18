@@ -10,12 +10,16 @@ const mediaOrigin = process.env.ADMIN_MEDIA_ORIGIN ?? 'http://localhost:8080';
 
 const nextConfig: NextConfig = {
   agentRules: false,
+  // Não anunciar o framework (X-Powered-By: Next.js) para quem procura versão vulnerável.
+  poweredByHeader: false,
   async headers() {
     return [
       {
         source: '/:path*',
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
+          // Painel só por HTTPS (180 dias); o sslip antigo em HTTP ignora o cabeçalho.
+          { key: 'Strict-Transport-Security', value: 'max-age=15552000' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'no-referrer' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
