@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { icons } from '../icons';
+import { municipios } from '../../lib/municipios';
 import {
   Empty,
   Frame,
@@ -23,6 +24,8 @@ interface Post {
   hidden: boolean;
   description: string;
   approxLabel: string;
+  /** Nome do município do ponto. API antiga não manda. */
+  municipality?: string | null;
   createdAt: string;
   authorHandle: string;
   authorName: string;
@@ -77,8 +80,11 @@ export default function PostsPage() {
   const [filter, setFilter] = useState<(typeof filters)[number]['value']>('pending');
   const [search, setSearch] = useState('');
   const [q, setQ] = useState('');
+  const [city, setCity] = useState('');
   const allowed = Boolean(me?.permissions.includes('posts.moderate'));
-  const query = `posts?filter=${filter}${q ? `&q=${encodeURIComponent(q)}` : ''}`;
+  const query = `posts?filter=${filter}${q ? `&q=${encodeURIComponent(q)}` : ''}${
+    city ? `&municipality=${city}` : ''
+  }`;
   const { data, message, reload } = useModeration<{ posts: Post[] }>(allowed ? query : null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState<string | null>(null);
@@ -134,6 +140,18 @@ export default function PostsPage() {
                   placeholder="Buscar no texto, no @ do autor ou no nome do animal"
                 />
               </span>
+              <select
+                aria-label="Cidade"
+                value={city}
+                onChange={(event) => setCity(event.target.value)}
+              >
+                <option value="">Todas as cidades</option>
+                {municipios.map((item) => (
+                  <option key={item.code} value={item.code}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
               <button type="submit">Buscar</button>
             </form>
             {message ? <p className="error">{message}</p> : null}
@@ -157,6 +175,7 @@ export default function PostsPage() {
                       <span className="badge">Recusado</span>
                     ) : null}
                     {post.hidden ? <span className="badge warn">Fora do ar</span> : null}
+                    {post.municipality ? <span className="badge">{post.municipality}</span> : null}
                     {post.reviewStatus === 'published' && !post.hidden ? (
                       <span className="badge ok">No ar</span>
                     ) : null}
